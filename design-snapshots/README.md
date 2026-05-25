@@ -23,7 +23,7 @@ YYYY-MM-DD-<component>-<state>.png
 
 ## איפה לצלם
 
-- SPA: `pnpm -F keren-or dev` → `/permissions`
+- SPA: `pnpm dev` → `/permissions`
 - Playground: `pnpm docs:create-playground` → `pnpm docs:dev` → `/playground/`
 - דמו בדוקס: `/material-ui/react-<component>/`
 

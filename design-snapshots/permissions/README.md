@@ -12,7 +12,7 @@
 ## איך לצלם
 
 ```bash
-pnpm -F keren-or dev
+pnpm dev
 ```
 
 1. פתחו http://localhost:5173/permissions
@@ -26,5 +26,5 @@ https://www.figma.com/design/n0ef0AHZbDk6sw2rQZQMFV?node-id=11776-17394
 
 ## קוד
 
-- עמוד: `apps/keren-or/src/pages/PermissionsManagementPage.tsx`
-- רכיבים: `apps/keren-or/src/components/campaigns/`
+- עמוד: `src/pages/PermissionsManagementPage.tsx`
+- רכיבים: `src/components/campaigns/`

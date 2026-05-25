@@ -1,4 +1,0 @@
-# Stray declaration files generated as side-effects of other packages' tsc builds
-**/*.d.ts
-**/*.d.ts.map
-!test/**

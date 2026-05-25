@@ -1,6 +1,6 @@
 ---
 description: דפים — רק הרכבת רכיבים קיימים, בלי עיצוב חדש inline
-globs: apps/keren-or/src/pages/**/*,docs/pages/**/*
+globs: src/pages/**/*
 alwaysApply: false
 ---
 

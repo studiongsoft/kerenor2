@@ -17,13 +17,13 @@
 
 | פעולה | היכן |
 |--------|------|
-| הרכבת עמודים מרכיבים קיימים | `apps/keren-or/src/pages/` |
-| קומפוננטות ספצificיות לעמוד | `apps/keren-or/src/components/` |
+| הרכבת עמודים מרכיבים קיימים | `src/pages/` |
+| קומפוננטות ספצificיות לעמוד | `src/components/` |
 | שינוי מראה רכיב MUI | `packages/mui-material/src/<Component>/` |
-| Theme tokens ו-overrides | `apps/keren-or/src/theme/` |
-| Mock store (MobX) | `apps/keren-or/src/stores/` |
-| Mock service + interface | `apps/keren-or/src/services/` |
-| רישום route | `apps/keren-or/src/routes/` |
+| Theme tokens ו-overrides | `src/theme/` |
+| Mock store (MobX) | `src/stores/` |
+| Mock service + interface | `src/services/` |
+| רישום route | `src/routes/` |
 | `sx` ל-layout בלבד | margin, gap, grid, flex — **לא** מראה קבוע של רכיב |
 | תיעוד רכיב | `design-decisions/components/<Name>.md` |
 

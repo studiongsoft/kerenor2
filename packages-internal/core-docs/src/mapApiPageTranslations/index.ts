@@ -1,1 +1,0 @@
-export { mapApiPageTranslations } from './mapApiPageTranslations';

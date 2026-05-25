@@ -41,11 +41,11 @@
 
 ## שלב 4 — תשתית עמוד
 
-1. **Types** — `apps/keren-or/src/types/<feature>.ts`
-2. **Mock data** — `apps/keren-or/src/services/mocks/`
-3. **Service interface** — `apps/keren-or/src/services/<feature>Service.ts`
-4. **Store stub** — `apps/keren-or/src/stores/<Feature>Store.ts`
-5. **Utils** (אם נדרש) — `apps/keren-or/src/utils/`
+1. **Types** — `src/types/<feature>.ts`
+2. **Mock data** — `src/services/mocks/`
+3. **Service interface** — `src/services/<feature>Service.ts`
+4. **Store stub** — `src/stores/<Feature>Store.ts`
+5. **Utils** (אם נדרש) — `src/utils/`
 
 ---
 
@@ -64,7 +64,7 @@
 
 ## שלב 6 — Route
 
-רשמו ב-`apps/keren-or/src/routes/index.tsx`:
+רשמו ב-`src/routes/index.tsx`:
 
 ```tsx
 <Route path="/my-page" element={<MyFeaturePage />} />
@@ -75,7 +75,7 @@
 ## שלב 7 — בדיקה
 
 ```bash
-pnpm -F keren-or dev
+pnpm dev
 ```
 
 - [ ] Light mode
@@ -98,9 +98,9 @@ pnpm -F keren-or dev
 ## פקודות
 
 ```bash
-pnpm -F keren-or dev          # SPA
+pnpm dev          # SPA
 pnpm docs:dev                 # גלריית רכיבים
 pnpm prettier                 # פורמט
 pnpm eslint                   # lint
-pnpm -F keren-or typescript   # type check
+pnpm typescript   # type check
 ```

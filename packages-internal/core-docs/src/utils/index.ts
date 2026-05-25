@@ -1,1 +1,0 @@
-export { getProductInfoFromUrl } from './getProductInfoFromUrl';

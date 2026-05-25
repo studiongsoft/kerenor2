@@ -1,6 +1,6 @@
 ---
 description: הפרדת שכבות — UI, stores, services
-globs: apps/keren-or/**/*
+globs: src/**/*
 alwaysApply: false
 ---
 

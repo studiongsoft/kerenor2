@@ -4,7 +4,7 @@
 |-----|-----|
 | עדכון אחרון | 2026-05-19 |
 | Figma | [TableCellRow 11776:17413](https://www.figma.com/design/n0ef0AHZbDk6sw2rQZQMFV?node-id=11776-17413) |
-| קוד | `apps/keren-or/src/components/campaigns/CampaignTableRow.tsx` |
+| קוד | `src/components/campaigns/CampaignTableRow.tsx` |
 
 ## התאמה ל-Figma (RTL)
 
@@ -24,6 +24,6 @@
 
 ### 2026-05-19 — שורת טבלה לפי Figma
 
-- חולץ `CampaignTableRow` מ-`apps/keren-or/src/pages/PermissionsManagementPage.tsx`
+- חולץ `CampaignTableRow` מ-`src/pages/PermissionsManagementPage.tsx`
 - תוקן סדר כוכבים ל-RTL
 - כפתורי פעולות: `variant="text"` עם מפרידים אנכיים במקום `ButtonGroup`

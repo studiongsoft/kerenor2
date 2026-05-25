@@ -16,7 +16,7 @@
 ## קישורים נוספים
 
 - [DESIGN-TO-CODE.md](../../DESIGN-TO-CODE.md) — חוקי design-to-code
-- [apps/keren-or/README.md](../../apps/keren-or/README.md) — handoff לפיתוח
+- [README.md](../../README.md) — handoff לפיתוח
 - [design-decisions/](../../design-decisions/) — תיעוד שינויי רכיבים
 - [Figma skill](../../.cursor/skills/figma-design-implementation/SKILL.md) — skill להטמעת Figma
 

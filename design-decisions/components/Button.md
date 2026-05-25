@@ -20,5 +20,5 @@
 
 ### 2026-05-17 — דף ניהול מבצעים
 
-- **איפה:** `apps/keren-or/src/theme/createKerenOrTheme.ts`
+- **איפה:** `src/theme/createKerenOrTheme.ts`
 - **לא שונה:** `packages/mui-material/src/Button/Button.js`

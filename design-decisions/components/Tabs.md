@@ -10,4 +10,4 @@
 ### 2026-05-17
 
 - `MuiTab`: minHeight 42, uppercase, 14px / 500
-- אייקונים: `icon` + `iconPosition="start"` (מימוש ב-`apps/keren-or/src/pages/PermissionsManagementPage.tsx`)
+- אייקונים: `icon` + `iconPosition="start"` (מימוש ב-`src/pages/PermissionsManagementPage.tsx`)

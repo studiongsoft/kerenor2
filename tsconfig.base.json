@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2020", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noEmit": true,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noErrorTruncation": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@mui/material": ["./packages/mui-material/src"],
+      "@mui/material/*": ["./packages/mui-material/src/*"],
+      "@mui/styled-engine": ["./packages/mui-styled-engine/src"],
+      "@mui/styled-engine/*": ["./packages/mui-styled-engine/src/*"],
+      "@mui/system": ["./packages/mui-system/src"],
+      "@mui/system/*": ["./packages/mui-system/src/*"],
+      "@mui/types": ["./packages/mui-types/src"],
+      "@mui/private-theming": ["./packages/mui-private-theming/src"],
+      "@mui/private-theming/*": ["./packages/mui-private-theming/src/*"],
+      "@mui/utils": ["./packages/mui-utils/src"],
+      "@mui/utils/*": ["./packages/mui-utils/src/*"]
+    },
+    "types": ["node", "react"]
+  },
+  "exclude": ["**/build", "**/node_modules", "dist"]
+}

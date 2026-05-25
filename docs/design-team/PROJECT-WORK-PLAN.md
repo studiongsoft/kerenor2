@@ -20,17 +20,18 @@
 
 | אזור | תפקיד | סטטוס |
 |------|--------|--------|
-| `apps/keren-or/src/pages/` | מסכי המערכת | **מוכן** |
-| `apps/keren-or/src/components/` | רכיבי UI משותפים וייעודיים | **מוכן** |
-| `apps/keren-or/src/stores/` | ניהול מצב + mock data | **מוכן** |
-| `apps/keren-or/src/services/` | שכבת API mock | **מוכן** |
-| `apps/keren-or/src/types/` | TypeScript types | **מוכן** |
-| `apps/keren-or/src/routes/` | ניווט | **מוכן** |
-| `apps/keren-or/src/theme/` | RTL + light/dark | **מוכן** |
-| `apps/keren-or/src/assets/` | משאבים גרפיים | **מוכן** (placeholder) |
+| `src/pages/` | מסכי המערכת | **מוכן** |
+| `src/components/` | רכיבי UI משותפים וייעודיים | **מוכן** |
+| `src/stores/` | ניהול מצב + mock data | **מוכן** |
+| `src/services/` | שכבת API mock | **מוכן** |
+| `src/types/` | TypeScript types | **מוכן** |
+| `src/routes/` | ניווט | **מוכן** |
+| `src/theme/` | RTL + light/dark | **מוכן** |
+| `src/assets/` | משאבים גרפיים | **מוכן** (placeholder) |
 | `design-decisions/` | תיעוד רכיבים | **מוכן** |
 | `design-snapshots/` | צילומי בדיקה | **מוכן** (`permissions/` light + dark) |
-| `apps/keren-or/README.md` | הנחיות handoff | **מוכן** |
+| `README.md` | הנחיות handoff | **מוכן** |
+| `src/hooks/` | Custom hooks | **מוכן** (placeholder) |
 
 ---
 
@@ -66,8 +67,8 @@
 הפרויקט הוא monorepo עם שני אזורים עיקריים:
 
 ```
-keren-or/
-├── apps/keren-or/              ← האפליקציה (SPA) — נקודת כניסה לפיתוח
+kerenor/
+├── src/                        ← האפליקציה (SPA) — נקודת כניסה לפיתוח
 ├── packages/mui-material/      ← Design System — רכיבי MUI מותאמים
 ├── design-decisions/           ← תיעוד שינויי רכיבים
 ├── design-snapshots/           ← צילומי light/dark/RTL
@@ -76,11 +77,10 @@ keren-or/
 
 ---
 
-## 4. מבנה האפליקציה (`apps/keren-or`)
+## 4. מבנה האפליקציה (`src/`)
 
 ```
-apps/keren-or/
-├── src/
+src/
 │   ├── main.tsx                # Bootstrap: Theme + Router + ErrorBoundary
 │   ├── App.tsx
 │   ├── components/             # קומפוננטות משותפות וספציפיות לעמוד
@@ -288,7 +288,7 @@ Figma URL
 ### 9.1 מה כלול ב-handoff
 
 ```
-apps/keren-or/                          ← אפליקציה runnable
+./                          ← אפליקציה runnable
 ├── src/
 │   ├── pages/                          ← עמודים מוכנים עם 4 מצבים
 │   ├── components/                     ← קומפוננטות UI
@@ -349,18 +349,18 @@ export async function fetchCampaigns(): Promise<Campaign[]> {
 
 ### 9.4 קriterions ל-handoff מוצלח
 
-- [x] `pnpm -F keren-or dev` — האפליקציה רצה
-- [x] `pnpm -F keren-or build` — build עובר
+- [x] `pnpm dev` — האפליקציה רצה
+- [x] `pnpm build` — build עובר
 - [x] כל עמוד עם 4 מצבים (Loading, Error, Empty, Success)
 - [x] כל route רשום ונגיש
 - [x] Theme: Light + Dark + RTL
 - [x] ErrorBoundary ברמת root
 - [x] Snackbar provider פעיל
 - [x] `.env.example` מתועד
-- [x] `apps/keren-or/README.md` — מדריך handoff
+- [x] `./README.md` — מדריך handoff
 - [x] `design-decisions/` מעודכן לכל רכיב
 - [x] `design-snapshots/permissions/` — light + dark
-- [x] `apps/keren-or/src/assets/` — תיקיית משאבים
+- [x] `src/assets/` — תיקיית משאבים
 
 ---
 
@@ -486,10 +486,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 pnpm install
 
 # הרצת האפליקציה (SPA)
-pnpm -F keren-or dev
+pnpm dev
 
 # Build production
-pnpm -F keren-or build
+pnpm build
 
 # MUI component demos (Design System)
 pnpm docs:dev
@@ -506,7 +506,7 @@ pnpm typescript
 
 | שלב | תיאור | אחראי |
 |-----|--------|--------|
-| **1. Scaffold** | יצירת `apps/keren-or` — Vite, dependencies, workspace config | עיצוב + פיתוח |
+| **1. Scaffold** | יצירת `src/` + Vite, dependencies, workspace config | עיצוב + פיתוח |
 | **2. Infrastructure** | ErrorBoundary, Snackbar, Loading/Error/Empty, apiClient, theme | עיצוב |
 | **3. Reference Page** | עמוד ייחוס ראשון עם 4 מצבים, store stub, mock service, form | עיצוב |
 | **4. Documentation** | מסמכי חוזה, מדריכים, checklists, Cursor rules | עיצוב |
@@ -525,7 +525,7 @@ pnpm typescript
 | `PAGE-CHECKLIST.md` | צ'קליסט copy-paste לכל PR |
 | `PAGE-TEMPLATE.md` | תבנית קוד לעמוד חדש |
 | `FIGMA-STATES-GUIDE.md` | מצבים חובה ב-Figma |
-| `apps/keren-or/README.md` | מדריך handoff לפיתוח |
+| `./README.md` | מדריך handoff לפיתוח |
 
 ---
 
@@ -534,7 +534,7 @@ pnpm typescript
 | נושא | החלטה | הערה |
 |------|--------|------|
 | **design-lead** | נשמר | RTL + Theme + Light/Dark — עומד בדרישת MUI Theme |
-| **Monorepo** | MUI packages + SPA app | פיתוח מקבל `apps/keren-or` כ-entry point |
+| **Monorepo** | MUI packages + SPA app | פיתוח מקבל `src/` כ-entry point |
 | **Mock → Real** | עיצוב: mocks / פיתוח: API | UI לא משתנה — רק service layer |
 | **State** | MobX stores | לא useState לנתוני עמוד |
 | **Routing** | React Router | לא Next.js file routing |

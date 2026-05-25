@@ -7,4 +7,4 @@
 
 ## 2026-05-17
 
-חיפוש מבצע — `TextField` + `InputAdornment` + `SearchIcon` ב-`apps/keren-or/src/pages/PermissionsManagementPage.tsx` בלבד.
+חיפוש מבצע — `TextField` + `InputAdornment` + `SearchIcon` ב-`src/pages/PermissionsManagementPage.tsx` בלבד.

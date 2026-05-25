@@ -88,7 +88,7 @@ description: >-
 
 1. צרו **store stub** + **mock service** (ראו [PAGE-TEMPLATE.md](../../../docs/design-team/PAGE-TEMPLATE.md))
 2. בנו עמוד עם **4 מצבים**: Loading, Error, Empty, Success
-3. רשמו route ב-`apps/keren-or/src/routes/`
+3. רשמו route ב-`src/routes/`
 
 ```tsx
 import { observer } from 'mobx-react-lite';
@@ -100,7 +100,7 @@ export default observer(function MyPage() {
 });
 ```
 
-- דפים SPA: `apps/keren-or/src/pages/`
+- דפים SPA: `src/pages/`
 - בדוק **light + dark** (`DesignModeToggle`)
 
 ### שלב 5 — תיעוד
@@ -135,7 +135,7 @@ export default observer(function MyPage() {
 
 | נושא | נתיב |
 |------|------|
-| SPA (אפליקציה) | `apps/keren-or/src/` |
+| SPA (אפליקציה) | `src/` |
 | רכיבי MUI | `packages/mui-material/src/<Component>/` |
 | תיעוד רכיב | `design-decisions/components/<Component>.md` |
 | מדריכי עיצוב | `docs/design-team/` |

@@ -1,0 +1,27 @@
+---
+description: דפים — רק הרכבת רכיבים קיימים, בלי עיצוב חדש inline
+globs: apps/keren-or/src/pages/**/*,docs/pages/**/*
+alwaysApply: false
+---
+
+# דפים — הרכבה בלבד
+
+קראו [DESIGN-TO-CODE.md](../../DESIGN-TO-CODE.md) חוק 2.
+
+## מותר
+
+- `Box`, `Stack`, `Grid`, `Container` ל-layout.
+- ייבוא מ-`@mui/material/<Component>` (one-level deep).
+- `sx` ל-spacing, margin, layout — לא למראה קבוע של רכיב.
+
+## אסור
+
+- העתקת קוד מ-`packages/mui-material/src/` לתוך קובץ דף.
+- `styled()` שמחליף רכיב MUI קיים.
+- override של `theme.components` מתוך קובץ דף.
+
+## אם נדרש שינוי ויזואלי
+
+1. ערכו את הרכיב ב-`packages/mui-material/src/<Component>/` או ב-`design-system/theme/createAppTheme.ts`.
+2. צרו `design-decisions/YYYY-MM-DD-*.md` מ-`design-decisions/TEMPLATE.md`.
+3. צרפו צילומים ל-`design-snapshots/`.

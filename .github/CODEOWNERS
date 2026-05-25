@@ -1,0 +1,11 @@
+# Design system — https://github.com/studiongsoft/design-lead
+# Replace @studiongsoft with your design-lead GitHub team/users
+
+/DESIGN-TO-CODE.md @studiongsoft
+/design-system/ @studiongsoft
+/docs/design-system/ @studiongsoft
+/docs/pages/playground/ @studiongsoft
+/.cursor/rules/design-*.mdc @studiongsoft
+
+/packages/mui-material/src/Button/ @studiongsoft
+/packages/mui-material/src/TextField/ @studiongsoft

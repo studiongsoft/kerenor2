@@ -1,0 +1,24 @@
+---
+description: שינוי רכיב — תיעוד ב-design-decisions וצילומים
+globs: packages/mui-material/**/*,design-system/**/*
+alwaysApply: false
+---
+
+# שינוי רכיב — תיעוד חובה
+
+קראו [DESIGN-TO-CODE.md](../../DESIGN-TO-CODE.md).
+
+## לפני merge
+
+1. קובץ ב-`design-decisions/` (העתקה מ-`TEMPLATE.md`).
+2. צילומי light + dark + RTL ב-`design-snapshots/` (או ב-PR).
+3. עדכון/הוספת דמו ב-`docs/data/material/components/` כשמתאים.
+
+## PR
+
+- השתמשו בתבנית `.github/pull_request_template/design_system.md`.
+- אם יש התנגשות עיצובית — תיוג `needs-design-approval` ואישור Design Lead.
+
+## Rollback
+
+ציינו ב-design-decision את ה-commit ל-`git revert`.

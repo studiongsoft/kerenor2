@@ -1,0 +1,29 @@
+---
+description: הפרדת שכבות — UI, stores, services
+globs: apps/keren-or/**/*
+alwaysApply: false
+---
+
+# שכבות אפליקציה — חובה
+
+קראו [docs/design-team/DESIGN-DEV-CONTRACT.md](../../docs/design-team/DESIGN-DEV-CONTRACT.md).
+
+## זרימה
+
+`pages/components` → `stores` (MobX) → `services` (Axios/mock)
+
+## אסור
+
+- `axios` / `fetch` ישירות מ-`pages/` או `components/`
+- לוגיקה עסקית ב-UI (חישובים, סינון server-side)
+- `useState` לנתוני עמוד שמגיעים מ-API — השתמשו ב-store
+
+## מותר ב-stores (עיצוב)
+
+- Mock stores עם `load()`, `isLoading`, `error`
+- קריאה ל-`services/` בלבד
+
+## מותר ב-services (עיצוב)
+
+- Mock implementation + `withMockDelay`
+- Interface שפיתוח יממש מול API אמיתי

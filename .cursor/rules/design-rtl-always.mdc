@@ -1,0 +1,23 @@
+---
+description: RTL תמיד — theme, stylis, dir על root ו-portals
+alwaysApply: true
+---
+
+# RTL תמיד
+
+קראו [DESIGN-TO-CODE.md](../../DESIGN-TO-CODE.md).
+
+## חובה
+
+- האפליקציה עטופה ב-`AppThemeProvider` מ-`@studiongsoft/design-lead` ([github.com/studiongsoft/design-lead](https://github.com/studiongsoft/design-lead)).
+- `createTheme({ direction: 'rtl' })` + stylis RTL — מובנה בחבילה.
+- שורש תוכן: `dir="rtl"` ו-`lang` מתאים (ברירת מחדל `he`).
+
+## אסור
+
+- `dir="ltr"` על קונטיינרים בלי רשומה ב-`docs/design-system/rtl.md`.
+- שינוי מראה רכיב בדף במקום ברכיב או ב-theme.
+
+## Portals
+
+על `Dialog`, `Modal`, `Popover`, `Menu` — העבירו `dir="rtl"` לרכיב אם אין RTL גלובלי על `<html>`.

@@ -1,0 +1,25 @@
+---
+description: כל שינוי רכיב — בדיקת light ו-dark (ו-RTL)
+globs: packages/mui-material/**/*,design-system/**/*,docs/data/material/components/**/*
+alwaysApply: false
+---
+
+# Light + Dark + RTL
+
+קראו [DESIGN-TO-CODE.md](../../DESIGN-TO-CODE.md) חוק 5.
+
+## Theme
+
+- השתמשו ב-`colorSchemes: { light: true, dark: true }` ב-`createAppTheme()` — לא רק `palette.mode` סטטי.
+- העדפו `theme.palette` / `theme.vars` — לא hex קשיחים.
+
+## צ'קליסט
+
+- [ ] Light
+- [ ] Dark (contrast, borders, shadows)
+- [ ] RTL
+
+## בדיקה
+
+- `DesignModeToggle` ב-playground או `useColorScheme()` באפליקציה.
+- `pnpm docs:dev` + דמו הרכיב.

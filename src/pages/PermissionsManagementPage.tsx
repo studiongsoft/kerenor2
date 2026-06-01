@@ -2,7 +2,7 @@
  * Figma: קרן אור כלים — ניהול מבצעים / הרשאות
  * @see https://www.figma.com/design/n0ef0AHZbDk6sw2rQZQMFV?node-id=11776-17394
  */
-import * as React from 'react';
+import { useCallback, useEffect, type ChangeEvent, type MouseEvent, type SyntheticEvent } from 'react';
 import { observer } from 'mobx-react-lite';
 import AddIcon from '@mui/icons-material/Add';
 import ApartmentIcon from '@mui/icons-material/Apartment';
@@ -42,7 +42,7 @@ import { ErrorState } from '../components/common/ErrorState';
 import { LoadingState } from '../components/common/LoadingState';
 import { useSnackbar } from '../components/common/AppSnackbarProvider';
 import { useCampaignStore } from '../stores/rootStore';
-import type { CampaignPermission, CampaignSortColumn } from '../types/campaign';
+import type { CampaignPermission, CampaignRowData, CampaignSortColumn } from '../types/campaign';
 
 const tableHeadCellSx = {
   textAlign: 'right /* @noflip */',
@@ -60,81 +60,126 @@ const SORT_COLUMNS: { id: CampaignSortColumn; label: string }[] = [
   { id: 'conferenceCount', label: 'כמות ועידות' },
 ];
 
+interface CampaignTableBodyProps {
+  isLoading: boolean;
+  error: string | null;
+  isEmpty: boolean;
+  searchQuery: string;
+  canManage: boolean;
+  paginatedRows: CampaignRowData[];
+  onRetry: () => void;
+  onAdd: () => void;
+  onEdit: (row: CampaignRowData) => void;
+  onDelete: (id: string) => void;
+}
+
+function CampaignTableBody({
+  isLoading,
+  error,
+  isEmpty,
+  searchQuery,
+  canManage,
+  paginatedRows,
+  onRetry,
+  onAdd,
+  onEdit,
+  onDelete,
+}: CampaignTableBodyProps) {
+  if (isLoading) {
+    return (
+      <TableRow>
+        <TableCell colSpan={6}>
+          <LoadingState message="טוען מבצעים..." />
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  if (error) {
+    return (
+      <TableRow>
+        <TableCell colSpan={6}>
+          <ErrorState message={error} onRetry={onRetry} />
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  if (isEmpty) {
+    return (
+      <TableRow>
+        <TableCell colSpan={6}>
+          <EmptyState
+            title="לא נמצאו מבצעים"
+            description={
+              searchQuery ? 'נסו לשנות את מילות החיפוש' : 'הוסיפו מבצע חדש כדי להתחיל'
+            }
+            actionLabel={canManage && !searchQuery ? 'הוספת מבצע' : undefined}
+            onAction={canManage && !searchQuery ? onAdd : undefined}
+          />
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  return paginatedRows.map((row) => (
+    <CampaignTableRow
+      key={row.id}
+      row={row}
+      canManage={canManage}
+      onEdit={onEdit}
+      onDelete={onDelete}
+    />
+  ));
+}
+
 function PermissionsManagementPageBase() {
   const store = useCampaignStore();
   const { showSnackbar } = useSnackbar();
 
-  React.useEffect(() => {
+  useEffect(() => {
     store.loadCampaigns();
   }, [store]);
 
-  const handleSave = async (row: Parameters<typeof store.saveCampaign>[0]) => {
-    const wasEdit = Boolean(store.editingRow);
-    const ok = await store.saveCampaign(row);
-    if (ok) {
-      showSnackbar(wasEdit ? 'המבצע עודכן בהצלחה' : 'המבצע נוסף בהצלחה', 'success');
-    }
-  };
+  const handleSave = useCallback(
+    async (row: Parameters<typeof store.saveCampaign>[0]) => {
+      const wasEdit = Boolean(store.editingRow);
+      const ok = await store.saveCampaign(row);
+      if (ok) {
+        showSnackbar(wasEdit ? 'המבצע עודכן בהצלחה' : 'המבצע נוסף בהצלחה', 'success');
+      }
+    },
+    [showSnackbar, store],
+  );
 
-  const handleDelete = async (id: string) => {
-    const ok = await store.deleteCampaign(id);
-    if (ok) {
-      showSnackbar('המבצע נמחק בהצלחה', 'success');
-    }
-  };
+  const handleDelete = useCallback(
+    async (id: string) => {
+      const ok = await store.deleteCampaign(id);
+      if (ok) {
+        showSnackbar('המבצע נמחק בהצלחה', 'success');
+      }
+    },
+    [showSnackbar, store],
+  );
 
-  const renderTableBody = () => {
-    if (store.isLoading) {
-      return (
-        <TableRow>
-          <TableCell colSpan={6}>
-            <LoadingState message="טוען מבצעים..." />
-          </TableCell>
-        </TableRow>
-      );
-    }
+  const handleRetry = useCallback(() => {
+    store.loadCampaigns();
+  }, [store]);
 
-    if (store.error) {
-      return (
-        <TableRow>
-          <TableCell colSpan={6}>
-            <ErrorState message={store.error} onRetry={() => store.loadCampaigns()} />
-          </TableCell>
-        </TableRow>
-      );
-    }
+  const handleAdd = useCallback(() => {
+    store.openAddDialog();
+  }, [store]);
 
-    if (store.isEmpty) {
-      return (
-        <TableRow>
-          <TableCell colSpan={6}>
-            <EmptyState
-              title="לא נמצאו מבצעים"
-              description={
-                store.searchQuery
-                  ? 'נסו לשנות את מילות החיפוש'
-                  : 'הוסיפו מבצע חדש כדי להתחיל'
-              }
-              actionLabel={store.canManage && !store.searchQuery ? 'הוספת מבצע' : undefined}
-              onAction={
-                store.canManage && !store.searchQuery ? () => store.openAddDialog() : undefined
-              }
-            />
-          </TableCell>
-        </TableRow>
-      );
-    }
+  const handleEdit = useCallback(
+    (row: CampaignRowData) => {
+      store.openEditDialog(row);
+    },
+    [store],
+  );
 
-    return store.paginatedRows.map((row) => (
-      <CampaignTableRow
-        key={row.id}
-        row={row}
-        canManage={store.canManage}
-        onEdit={(item) => store.openEditDialog(item)}
-        onDelete={handleDelete}
-      />
-    ));
-  };
+  const handleCloseDialog = useCallback(() => {
+    store.closeDialog();
+  }, [store]);
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -170,7 +215,7 @@ function PermissionsManagementPageBase() {
       <Container maxWidth="lg" sx={{ py: 3 }}>
         <Tabs
           value={store.tab}
-          onChange={(_: React.SyntheticEvent, v: number) => store.setTab(v)}
+          onChange={(_: SyntheticEvent, v: number) => store.setTab(v)}
           textColor="primary"
           indicatorColor="primary"
           sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
@@ -200,9 +245,7 @@ function PermissionsManagementPageBase() {
               size="small"
               placeholder="חיפוש מבצע..."
               value={store.searchQuery}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                store.setSearchQuery(e.target.value)
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => store.setSearchQuery(e.target.value)}
               sx={{ width: 280, mt: 2 }}
               slotProps={{
                 input: {
@@ -223,7 +266,7 @@ function PermissionsManagementPageBase() {
               size="medium"
               startIcon={<AddIcon />}
               sx={{ flexShrink: 0, alignSelf: 'flex-start' }}
-              onClick={() => store.openAddDialog()}
+              onClick={handleAdd}
             >
               הוספת מבצע
             </Button>
@@ -255,7 +298,20 @@ function PermissionsManagementPageBase() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>{renderTableBody()}</TableBody>
+            <TableBody>
+              <CampaignTableBody
+                isLoading={store.isLoading}
+                error={store.error}
+                isEmpty={store.isEmpty}
+                searchQuery={store.searchQuery}
+                canManage={store.canManage}
+                paginatedRows={store.paginatedRows}
+                onRetry={handleRetry}
+                onAdd={handleAdd}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </TableBody>
             {!store.isLoading && !store.error && !store.isEmpty ? (
               <TableFooter>
                 <TableRow>
@@ -263,7 +319,7 @@ function PermissionsManagementPageBase() {
                     colSpan={6}
                     count={store.sortedRows.length}
                     page={store.page}
-                    onPageChange={(_: React.MouseEvent<HTMLButtonElement> | null, p: number) =>
+                    onPageChange={(_: MouseEvent<HTMLButtonElement> | null, p: number) =>
                       store.setPage(p)
                     }
                     rowsPerPage={store.rowsPerPage}
@@ -289,7 +345,7 @@ function PermissionsManagementPageBase() {
         open={store.dialogOpen}
         mode={store.editingRow ? 'edit' : 'add'}
         initialRow={store.editingRow}
-        onClose={() => store.closeDialog()}
+        onClose={handleCloseDialog}
         onSave={handleSave}
       />
     </Box>

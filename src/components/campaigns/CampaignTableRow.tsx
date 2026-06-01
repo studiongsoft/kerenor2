@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -57,16 +57,16 @@ const tableCellLtrTypographySx: SxProps<Theme> = {
   letterSpacing: '0.17px',
 };
 
-function TableCellContent({ children }: { children: React.ReactNode }) {
+function TableCellContent({ children }: { children: ReactNode }) {
   return <Box sx={tableCellInnerSx}>{children}</Box>;
 }
 
 interface TableCellTextProps {
-  children: React.ReactNode;
+  children: ReactNode;
   variant?: 'body2' | 'caption';
   color?: 'text.primary' | 'primary.dark';
   ltr?: boolean;
-  sx?: React.ComponentProps<typeof Typography>['sx'];
+  sx?: ComponentProps<typeof Typography>['sx'];
 }
 
 function TableCellText({

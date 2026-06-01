@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -74,7 +74,7 @@ export function CampaignFormDialog({
     defaultValues: defaultCampaignFormValues,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (open) {
       reset(initialRow ? fromRow(initialRow) : defaultCampaignFormValues);
     }

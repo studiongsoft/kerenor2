@@ -1,4 +1,11 @@
-import * as React from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type ReactNode,
+  type SyntheticEvent,
+} from 'react';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
@@ -13,16 +20,16 @@ interface SnackbarContextValue {
   showSnackbar: (message: string, severity?: SnackbarSeverity) => void;
 }
 
-const SnackbarContext = React.createContext<SnackbarContextValue | null>(null);
+const SnackbarContext = createContext<SnackbarContextValue | null>(null);
 
-export function AppSnackbarProvider({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = React.useState(false);
-  const [current, setCurrent] = React.useState<SnackbarMessage>({
+export function AppSnackbarProvider({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState<SnackbarMessage>({
     message: '',
     severity: 'info',
   });
 
-  const showSnackbar = React.useCallback(
+  const showSnackbar = useCallback(
     (message: string, severity: SnackbarSeverity = 'info') => {
       setCurrent({ message, severity });
       setOpen(true);
@@ -30,12 +37,12 @@ export function AppSnackbarProvider({ children }: { children: React.ReactNode })
     [],
   );
 
-  const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = useCallback((_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
-  };
+  }, []);
 
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
@@ -55,7 +62,7 @@ export function AppSnackbarProvider({ children }: { children: React.ReactNode })
 }
 
 export function useSnackbar(): SnackbarContextValue {
-  const context = React.useContext(SnackbarContext);
+  const context = useContext(SnackbarContext);
   if (!context) {
     throw new Error('useSnackbar must be used within AppSnackbarProvider');
   }

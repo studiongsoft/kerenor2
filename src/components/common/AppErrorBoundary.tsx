@@ -1,11 +1,12 @@
-import * as React from 'react';
+import { Component, type ReactNode } from 'react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+// Error boundaries require a class component — no hooks equivalent in React.
 interface AppErrorBoundaryProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface AppErrorBoundaryState {
@@ -13,7 +14,7 @@ interface AppErrorBoundaryState {
   error: Error | null;
 }
 
-export class AppErrorBoundary extends React.Component<
+export class AppErrorBoundary extends Component<
   AppErrorBoundaryProps,
   AppErrorBoundaryState
 > {

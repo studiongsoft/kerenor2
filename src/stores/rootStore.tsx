@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import { CampaignStore } from './CampaignStore';
 
 export interface RootStore {
@@ -11,20 +11,20 @@ export function createRootStore(): RootStore {
   };
 }
 
-const StoreContext = React.createContext<RootStore | null>(null);
+const StoreContext = createContext<RootStore | null>(null);
 
 export function StoreProvider({
   store,
   children,
 }: {
   store: RootStore;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 }
 
 export function useRootStore(): RootStore {
-  const store = React.useContext(StoreContext);
+  const store = useContext(StoreContext);
   if (!store) {
     throw new Error('useRootStore must be used within StoreProvider');
   }

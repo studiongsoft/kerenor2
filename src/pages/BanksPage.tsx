@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
+import Link from '@mui/material/Link';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
@@ -121,6 +122,7 @@ function BanksPageBase() {
         error={store.error}
         isEmpty={store.isEmpty}
         onRetry={() => store.loadBanks()}
+        emptyIcon="banks"
         emptyTitle="לא נמצאו בנקים"
         emptyDescription={
           store.searchQuery ? 'נסו לשנות את מילות החיפוש' : 'הוסיפו בנק חדש כדי להתחיל'
@@ -130,9 +132,21 @@ function BanksPageBase() {
           <TableRow key={row.id}>
             <TableCell align="right" sx={tableBodyCellSx}>
               <Box sx={tableCellInnerSx}>
-                <Typography variant="body2" sx={tablePrimaryCellContentSx}>
+                <Link
+                  component="button"
+                  type="button"
+                  variant="body2"
+                  underline="none"
+                  onClick={() => handleEdit(row)}
+                  sx={{
+                    ...tablePrimaryCellContentSx,
+                    fontWeight: 400,
+                    cursor: 'pointer',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
                   {row.name}
-                </Typography>
+                </Link>
               </Box>
             </TableCell>
             <TableCell align="right" sx={tableBodyCellSx}>

@@ -12,12 +12,14 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import type { DataTableColumn, SortState } from '../../types/table';
 import { TABLE_ROWS_PER_PAGE } from '../../types/table';
 import { EmptyState } from '../common/EmptyState';
+import type { EmptyStateIcon } from '../common/emptyStateIcons';
 import { ErrorState } from '../common/ErrorState';
 import { LoadingState } from '../common/LoadingState';
 import {
   TABLE_ACTIONS_COLUMN_WIDTH,
   tableCellInnerSx,
   tableHeadCellSx,
+  tableMessageRowSx,
   tablePaginationSx,
   tableSortLabelSx,
 } from './tableStyles';
@@ -33,6 +35,7 @@ interface DataTableProps<C extends string> {
   error: string | null;
   isEmpty: boolean;
   onRetry?: () => void;
+  emptyIcon: EmptyStateIcon;
   emptyTitle: string;
   emptyDescription: string;
   emptyActionLabel?: string;
@@ -53,6 +56,7 @@ export function DataTable<C extends string>({
   error,
   isEmpty,
   onRetry,
+  emptyIcon,
   emptyTitle,
   emptyDescription,
   emptyActionLabel,
@@ -67,7 +71,7 @@ export function DataTable<C extends string>({
   const renderBody = () => {
     if (isLoading) {
       return (
-        <TableRow>
+        <TableRow sx={tableMessageRowSx}>
           <TableCell colSpan={columnCount}>
             <LoadingState message="טוען..." />
           </TableCell>
@@ -77,7 +81,7 @@ export function DataTable<C extends string>({
 
     if (error) {
       return (
-        <TableRow>
+        <TableRow sx={tableMessageRowSx}>
           <TableCell colSpan={columnCount}>
             <ErrorState message={error} onRetry={onRetry} />
           </TableCell>
@@ -87,9 +91,10 @@ export function DataTable<C extends string>({
 
     if (isEmpty) {
       return (
-        <TableRow>
+        <TableRow sx={tableMessageRowSx}>
           <TableCell colSpan={columnCount}>
             <EmptyState
+              icon={emptyIcon}
               title={emptyTitle}
               description={emptyDescription}
               actionLabel={emptyActionLabel}
@@ -135,8 +140,8 @@ export function DataTable<C extends string>({
                 )}
               </TableCell>
             ))}
-            <TableCell align="right" sx={tableHeadCellSx}>
-              <Box sx={tableCellInnerSx}>{actionsColumnLabel}</Box>
+            <TableCell align="inherit" sx={tableHeadCellSx}>
+              {actionsColumnLabel}
             </TableCell>
           </TableRow>
         </TableHead>

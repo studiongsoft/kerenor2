@@ -3,7 +3,7 @@ import type { Theme, ThemeOptions } from '@mui/material/styles';
 
 /** Shared table layout tokens — exported for tableStyles */
 export const TABLE_CELL_PX = 2;
-export const TABLE_ROW_HEIGHT = 62;
+export const TABLE_ROW_HEIGHT = 48;
 /** Fixed height for buttons, inputs, search fields, and table headers */
 export const CONTROL_HEIGHT = 40;
 /** Minimum width for action buttons */
@@ -33,6 +33,11 @@ export const TABLE_HEAD_HEIGHT = CONTROL_HEIGHT;
 export const TABLE_FOOTER_HEIGHT = 44;
 export const TABLE_ACTIONS_COLUMN_WIDTH = 132;
 export const TABLE_CELL_BORDER = 'rgba(0, 0, 0, 0.12)';
+/** Table body row hover — 50% of `palette.action.hover` alpha (light 0.02, dark 0.04) */
+export const TABLE_ROW_HOVER = {
+  light: 'rgba(0, 0, 0, 0.02)',
+  dark: 'rgba(255, 255, 255, 0.04)',
+} as const;
 
 /** Inactive sidebar nav icon fill — Figma avatar/fill */
 export const SIDEBAR_NAV_ICON_INACTIVE = {
@@ -72,18 +77,31 @@ const DARK_SURFACE = {
   page: '#1D1D1D',
   sidebar: '#232323',
   topBar: '#272727',
-  table: '#1E1E1E',
+  table: '#232323',
   popup: '#272727',
   input: 'rgba(255, 255, 255, 0.05)',
   border: 'rgba(255, 255, 255, 0.12)',
 } as const;
 
-/** Dark primary interaction tokens */
-const DARK_PRIMARY = {
+/** Dark card surface — welcome cards, popups */
+export const DARK_CARD_SURFACE = DARK_SURFACE.popup;
+
+/** Dark primary interaction tokens — exported for sidebar active icon */
+export const DARK_PRIMARY = {
   main: '#00BCD4',
   dark: '#00ACC1',
   hover: 'rgba(0, 188, 212, 0.08)',
   selected: 'rgba(0, 188, 212, 0.16)',
+} as const;
+
+/** Dark sidebar nav item — Figma 2026-06-10 (default / hover / selected) */
+export const SIDEBAR_NAV_DARK = {
+  textDefault: 'rgba(255, 255, 255, 0.8)',
+  textHover: '#FFFFFF',
+  textActive: DARK_PRIMARY.main,
+  iconActive: DARK_PRIMARY.dark,
+  bgHover: 'rgba(255, 255, 255, 0.08)',
+  bgActive: DARK_PRIMARY.selected,
 } as const;
 
 const primaryPalette = {
@@ -98,7 +116,7 @@ const darkPrimaryPalette = {
   main: DARK_PRIMARY.main,
   dark: DARK_PRIMARY.dark,
   light: DARK_PRIMARY.main,
-  contrastText: '#FFFFFF',
+  contrastText: '#000000',
 } as const;
 
 const secondaryPalette = {
@@ -327,18 +345,20 @@ export const kerenOrThemeOptions = {
           boxShadow: 'none',
           minWidth: BUTTON_MIN_WIDTH,
         },
-        contained: {
+        contained: ({ theme }: ThemeCallback) => ({
           minHeight: CONTROL_HEIGHT,
           maxHeight: CONTROL_HEIGHT,
           height: CONTROL_HEIGHT,
           width: 'auto',
           padding: '0 16px',
-          color: '#FFFFFF',
           boxShadow: 'none',
+          ...theme.applyStyles('light', {
+            color: '#FFFFFF',
+          }),
           '&:hover': {
             boxShadow: 'none',
           },
-        },
+        }),
         outlined: {
           minHeight: CONTROL_HEIGHT,
           height: CONTROL_HEIGHT,
@@ -355,6 +375,16 @@ export const kerenOrThemeOptions = {
           minHeight: CONTROL_HEIGHT,
           height: CONTROL_HEIGHT,
         },
+        containedPrimary: ({ theme }: ThemeCallback) => ({
+          ...theme.applyStyles('dark', {
+            color: theme.palette.primary.contrastText,
+            backgroundColor: theme.palette.primary.main,
+            '&:hover': {
+              color: theme.palette.primary.contrastText,
+              backgroundColor: theme.palette.primary.dark,
+            },
+          }),
+        }),
       },
     },
     MuiTab: {
@@ -430,7 +460,7 @@ export const kerenOrThemeOptions = {
           backgroundColor: SURFACE.tableHead,
           borderBottom: `1px solid ${TABLE_CELL_BORDER}`,
           ...theme.applyStyles('dark', {
-            backgroundColor: DARK_SURFACE.table,
+            backgroundColor: DARK_PRIMARY.hover,
             borderBottomColor: DARK_SURFACE.border,
           }),
         }),
@@ -504,7 +534,10 @@ export const kerenOrThemeOptions = {
           maxHeight: `${TABLE_ROW_HEIGHT}px`,
           'tbody &': {
             '&:hover': {
-              backgroundColor: themePalette(theme).action.hover,
+              backgroundColor: TABLE_ROW_HOVER.light,
+              ...theme.applyStyles('dark', {
+                backgroundColor: TABLE_ROW_HOVER.dark,
+              }),
               '& .MuiTableCell-root': {
                 backgroundColor: 'transparent',
               },
@@ -734,21 +767,26 @@ export const kerenOrThemeOptions = {
           '& .MuiListItemText-primary': {
             textAlign: 'right /* @noflip */',
           },
+          ...theme.applyStyles('dark', {
+            color: SIDEBAR_NAV_DARK.textDefault,
+            backgroundColor: 'transparent',
+          }),
           '&:hover': {
             backgroundColor: 'rgba(0, 131, 143, 0.04)',
             ...theme.applyStyles('dark', {
-              backgroundColor: DARK_PRIMARY.hover,
+              backgroundColor: SIDEBAR_NAV_DARK.bgHover,
+              color: SIDEBAR_NAV_DARK.textHover,
+              '& .MuiListItemText-primary': {
+                color: SIDEBAR_NAV_DARK.textHover,
+              },
             }),
           },
-          ...theme.applyStyles('dark', {
-            color: themePalette(theme).text.secondary,
-          }),
           '&.Mui-selected': {
             backgroundColor: SURFACE.sidebarActive,
             color: themePalette(theme).primary.main,
             ...theme.applyStyles('dark', {
-              backgroundColor: DARK_PRIMARY.selected,
-              color: themePalette(theme).primary.main,
+              backgroundColor: SIDEBAR_NAV_DARK.bgActive,
+              color: SIDEBAR_NAV_DARK.textActive,
               '& .MuiListItemIcon-root img': {
                 opacity: 1,
               },
@@ -759,11 +797,19 @@ export const kerenOrThemeOptions = {
             '& .MuiListItemText-primary': {
               fontWeight: 600,
               color: themePalette(theme).primary.main,
+              ...theme.applyStyles('dark', {
+                fontWeight: 400,
+                color: SIDEBAR_NAV_DARK.textActive,
+              }),
             },
             '&:hover': {
               backgroundColor: SURFACE.sidebarActive,
               ...theme.applyStyles('dark', {
-                backgroundColor: DARK_PRIMARY.selected,
+                backgroundColor: SIDEBAR_NAV_DARK.bgActive,
+                color: SIDEBAR_NAV_DARK.textActive,
+                '& .MuiListItemText-primary': {
+                  color: SIDEBAR_NAV_DARK.textActive,
+                },
               }),
             },
           },

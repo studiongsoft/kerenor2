@@ -1,5 +1,8 @@
 import Box from '@mui/material/Box';
-import { SIDEBAR_NAV_ICON_INACTIVE } from '../../theme/createKerenOrTheme';
+import {
+  SIDEBAR_NAV_DARK,
+  SIDEBAR_NAV_ICON_INACTIVE,
+} from '../../theme/createKerenOrTheme';
 import type { ResolvedColorMode } from '../../theme/useResolvedColorMode';
 
 interface SidebarNavIconProps {
@@ -17,7 +20,11 @@ export function SidebarNavIcon({ src, active, colorMode }: SidebarNavIconProps) 
         height: 24,
         display: 'block',
         flexShrink: 0,
-        bgcolor: active ? theme.palette.primary.main : SIDEBAR_NAV_ICON_INACTIVE[colorMode],
+        bgcolor: active
+          ? colorMode === 'dark'
+            ? SIDEBAR_NAV_DARK.iconActive
+            : theme.palette.primary.main
+          : SIDEBAR_NAV_ICON_INACTIVE[colorMode],
         maskImage: `url(${src})`,
         maskSize: 'contain',
         maskRepeat: 'no-repeat',

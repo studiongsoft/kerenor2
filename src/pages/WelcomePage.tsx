@@ -35,7 +35,7 @@ export default function WelcomePage() {
         component="h1"
         sx={{
           textAlign: 'center',
-          fontSize: 60,
+          fontSize: 48,
           fontWeight: 400,
           mb: 2,
         }}
@@ -49,7 +49,7 @@ export default function WelcomePage() {
         sx={{
           textAlign: 'center',
           width: '100%',
-          fontSize: 24,
+          fontSize: 16,
           mb: 6,
           lineHeight: 1.6,
         }}

@@ -44,7 +44,6 @@ export function DialogFormHeader({
         sx={{
           flex: 1,
           fontWeight: titleVariant === 'h6' ? 600 : 400,
-          textAlign: 'right /* @noflip */',
           ...rtlTextSx,
         }}
       >

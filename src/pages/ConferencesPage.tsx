@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
 import { ConferenceFormDialog } from '../components/conferences/ConferenceFormDialog';
 import { DeleteConfirmDialog, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
 import { DataTable } from '../components/table/DataTable';
@@ -110,6 +111,7 @@ function ConferencesPageBase() {
         error={store.error}
         isEmpty={store.isEmpty}
         onRetry={() => store.loadConferences()}
+        emptyIcon="conferences"
         emptyTitle="לא נמצאו ועידות"
         emptyDescription={
           store.searchQuery ? 'נסו לשנות את מילות החיפוש' : 'הוסיפו ועידה חדשה כדי להתחיל'
@@ -119,9 +121,21 @@ function ConferencesPageBase() {
           <TableRow key={row.id}>
             <TableCell align="right" sx={tableBodyCellSx}>
               <Box sx={tableCellInnerSx}>
-                <Typography variant="body2" sx={tablePrimaryCellLtrContentSx}>
+                <Link
+                  component="button"
+                  type="button"
+                  variant="body2"
+                  underline="none"
+                  onClick={() => handleEdit(row)}
+                  sx={{
+                    ...tablePrimaryCellLtrContentSx,
+                    fontWeight: 400,
+                    cursor: 'pointer',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
                   {row.number}
-                </Typography>
+                </Link>
               </Box>
             </TableCell>
             <TableCell align="right" sx={tableBodyCellSx}>

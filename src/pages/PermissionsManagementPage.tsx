@@ -110,6 +110,7 @@ function PermissionsManagementPageBase() {
         error={store.error}
         isEmpty={store.isEmpty}
         onRetry={() => store.loadCampaigns()}
+        emptyIcon="campaigns"
         emptyTitle="לא נמצאו מבצעים"
         emptyDescription={
           store.searchQuery ? 'נסו לשנות את מילות החיפוש' : 'הוסיפו מבצע חדש כדי להתחיל'

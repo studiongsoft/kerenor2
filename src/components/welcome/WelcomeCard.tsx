@@ -1,10 +1,10 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import type { ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { POPUP_SHADOW, SURFACE_SHADOW } from '../../theme/createKerenOrTheme';
+import { DARK_CARD_SURFACE, POPUP_SHADOW, SURFACE_SHADOW } from '../../theme/createKerenOrTheme';
 import { rtlTextSx } from '../../theme/rtlLayout';
 
 const CARD_DESCRIPTION =
@@ -18,11 +18,11 @@ interface WelcomeCardProps {
 
 export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
   return (
-    <Paper
+    <ButtonBase
       component={RouterLink}
       to={to}
-      elevation={0}
       sx={(theme) => ({
+        fontSize: '8px',
         width: 280,
         height: 'fit-content',
         pt: 0,
@@ -30,9 +30,15 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
         pb: 3,
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: '4px',
+        alignItems: 'stretch',
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: '16px',
         boxShadow: SURFACE_SHADOW,
         bgcolor: 'background.paper',
+        ...theme.applyStyles('dark', {
+          bgcolor: DARK_CARD_SURFACE,
+        }),
         color: 'inherit',
         textDecoration: 'none',
         cursor: 'pointer',
@@ -42,6 +48,14 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
         '&:hover': {
           boxShadow: POPUP_SHADOW,
           transform: 'translateY(-2px)',
+          '@media (hover: none)': {
+            boxShadow: SURFACE_SHADOW,
+            transform: 'none',
+          },
+        },
+        '&:active': {
+          boxShadow: SURFACE_SHADOW,
+          transform: 'translateY(0)',
         },
         '&:focus-visible': {
           outline: `2px solid ${theme.palette.primary.main}`,
@@ -84,6 +98,6 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
           כניסה
         </Box>
       </Box>
-    </Paper>
+    </ButtonBase>
   );
 }

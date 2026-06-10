@@ -26,6 +26,7 @@ export function TableIconActions({
       sx={{
         alignItems: 'center',
         flexShrink: 0,
+        gap: '4px',
         color: 'action.active',
         '& .MuiIconButton-root': {
           padding: '6px',

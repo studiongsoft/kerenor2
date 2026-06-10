@@ -17,6 +17,16 @@ export {
 /** @deprecated Use TABLE_ROW_HEIGHT */
 export const TABLE_CELL_HEIGHT = TABLE_ROW_HEIGHT;
 
+/** Loading / error / empty rows — no tbody hover highlight */
+export const tableMessageRowSx = {
+  '&:hover': {
+    backgroundColor: 'transparent',
+    '& .MuiTableCell-root': {
+      backgroundColor: 'transparent',
+    },
+  },
+} as const;
+
 /** Right-align cell content on the same vertical line as the column header */
 export const tableCellInnerSx = {
   display: 'flex',

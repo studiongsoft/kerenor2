@@ -2,7 +2,7 @@
 
 | שדה | ערך |
 |-----|-----|
-| עדכון אחרון | 2026-06-10 |
+| עדכון אחרון | 2026-06-10 (dark text) |
 | Figma | [node 11776:17405](https://www.figma.com/design/n0ef0AHZbDk6sw2rQZQMFV?node-id=11776-17405) |
 | סטטוס | שונה ב-theme (לא ב-`Button.js`) |
 
@@ -17,6 +17,12 @@
 | elevation | 2 | shadow ב-styleOverrides |
 
 ## שינויים
+
+### 2026-06-10 — טקסט כהה במצב כהה
+
+- **איפה:** `src/theme/createKerenOrTheme.ts`
+- **שינוי:** `containedPrimary` במצב כהה — `color: #000000` (רקע `#00BCD4`); `darkPrimaryPalette.contrastText` → `#000000`
+- **לא שונה:** `packages/mui-material/src/Button/Button.js`
 
 ### 2026-06-10 — גובה אחיד 40px
 

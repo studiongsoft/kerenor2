@@ -1,16 +1,16 @@
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
 import type { ReactNode } from 'react';
 
 /** Primary button on the physical left, secondary on the physical right. */
-export const primarySecondaryActionsSx = {
+export const primarySecondaryActionsSx: SxProps<Theme> = {
   display: 'flex',
   direction: 'ltr /* @noflip */',
   flexDirection: 'row',
   justifyContent: 'flex-start /* @noflip */',
   alignItems: 'center',
   gap: 1.5,
-} as const;
+};
 
 interface PrimarySecondaryActionsProps {
   primary: ReactNode;
@@ -19,10 +19,12 @@ interface PrimarySecondaryActionsProps {
 }
 
 export function PrimarySecondaryActions({ primary, secondary, sx }: PrimarySecondaryActionsProps) {
+  const mergedSx = (sx ? { ...primarySecondaryActionsSx, ...sx } : primarySecondaryActionsSx) as SxProps<Theme>;
+
   return (
-    <Stack component="div" sx={{ ...primarySecondaryActionsSx, ...sx }}>
+    <Box sx={mergedSx}>
       {primary}
       {secondary}
-    </Stack>
+    </Box>
   );
 }

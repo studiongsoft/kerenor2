@@ -1,23 +1,33 @@
 import { z } from 'zod';
+import {
+  conferenceAllocationSchema,
+  conferencesFieldSchema,
+  type ConferenceAllocation,
+} from './conferenceAllocationSchema';
+
+/** @deprecated Use ConferenceAllocation */
+export type CampaignConferenceAllocation = ConferenceAllocation;
+
+export const campaignConferenceAllocationSchema = conferenceAllocationSchema;
 
 export const campaignFormSchema = z.object({
   name: z.string().trim().min(1, 'שם המבצע חובה'),
+  description: z.string(),
+  startDate: z.string().trim().min(1, 'מועד התחלה חובה'),
   startTime: z.string().trim().min(1, 'שעת התחלה חובה'),
-  startDate: z.string().trim().min(1, 'תאריך התחלה חובה'),
-  endTime: z.string().trim().min(1, 'שעת סיום חובה'),
-  endDate: z.string().trim().min(1, 'תאריך סיום חובה'),
-  version: z.string().trim().min(1, 'גרסה חובה'),
-  conferencesText: z.string(),
+  endDate: z.string(),
+  endTime: z.string(),
+  conferences: conferencesFieldSchema,
 });
 
 export type CampaignFormValues = z.infer<typeof campaignFormSchema>;
 
 export const defaultCampaignFormValues: CampaignFormValues = {
   name: '',
-  startTime: '10:00',
+  description: '',
   startDate: '',
-  endTime: '18:00',
+  startTime: '00:00',
   endDate: '',
-  version: 'V1',
-  conferencesText: '',
+  endTime: '',
+  conferences: [],
 };

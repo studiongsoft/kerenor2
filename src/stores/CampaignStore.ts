@@ -11,6 +11,7 @@ import type {
   CampaignSortState,
 } from '../types/campaign';
 import { DEFAULT_CAMPAIGN_SORT, canManageCampaigns } from '../types/campaign';
+import { TABLE_ROWS_PER_PAGE } from '../types/table';
 import { filterCampaigns, sortCampaigns, toggleSort } from '../utils/campaignListLogic';
 
 export class CampaignStore {
@@ -28,13 +29,11 @@ export class CampaignStore {
 
   page = 0;
 
-  rowsPerPage = 9;
+  rowsPerPage = TABLE_ROWS_PER_PAGE;
 
   dialogOpen = false;
 
   editingRow: CampaignRowData | undefined = undefined;
-
-  tab = 2;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -89,10 +88,6 @@ export class CampaignStore {
     this.page = 0;
   }
 
-  setTab(tab: number): void {
-    this.tab = tab;
-  }
-
   setPage(page: number): void {
     this.page = page;
   }
@@ -119,10 +114,6 @@ export class CampaignStore {
 
   async deleteCampaign(id: string): Promise<boolean> {
     if (!this.canManage) {
-      return false;
-    }
-    const row = this.campaigns.find((item) => item.id === id);
-    if (row && !window.confirm(`למחוק את המבצע "${row.name}"?`)) {
       return false;
     }
     try {

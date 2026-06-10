@@ -45,13 +45,13 @@ const TablePaginationToolbar = styled(Toolbar, {
   }),
 })(
   memoTheme(({ theme }) => ({
-    minHeight: 52,
+    minHeight: 44,
     paddingRight: 2,
     [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      minHeight: 52,
+      minHeight: 44,
     },
     [theme.breakpoints.up('sm')]: {
-      minHeight: 52,
+      minHeight: 44,
       paddingRight: 2,
     },
     [`& .${tablePaginationClasses.actions}`]: {

@@ -2,6 +2,7 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { rtlTextSx } from '../../theme/rtlLayout';
 
 interface ErrorStateProps {
   message?: string;
@@ -13,7 +14,7 @@ export function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   return (
-    <Box sx={{ py: 6, px: 2 }}>
+    <Box sx={{ py: 6, px: 2, width: '100%', ...rtlTextSx }}>
       <Alert
         severity="error"
         action={
@@ -24,7 +25,9 @@ export function ErrorState({
           ) : undefined
         }
       >
-        <Typography variant="body2">{message}</Typography>
+        <Typography variant="body2" color="text.primary">
+          {message}
+        </Typography>
       </Alert>
     </Box>
   );

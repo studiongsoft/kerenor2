@@ -7,18 +7,18 @@ const sampleConferences = (names: string[]) =>
     bank: index % 2 === 0 ? 'בנק לאומי' : 'בנק הפועלים',
   }));
 
-export const MOCK_CAMPAIGNS: CampaignRowData[] = [
+const BASE_CAMPAIGNS: CampaignRowData[] = [
   {
     id: '1',
-    name: 'מבצע סבתא',
-    startTime: '10:00',
-    startDate: '27/10/2024',
+    name: 'מבצע סערת מדבר',
+    startTime: '14:00',
+    startDate: '18/02/2027',
     endTime: '22:00',
-    endDate: '01/11/2024',
-    version: 'V1',
+    endDate: '22/02/2027',
+    version: 'V1.3',
     conferenceCount: 3,
     conferences: sampleConferences(['ועידת סבתא מרכז', 'ועידת צפון', 'ועידת דרום']),
-    actionType: 'stars',
+    actionType: 'actions',
   },
   {
     id: '2',
@@ -122,3 +122,45 @@ export const MOCK_CAMPAIGNS: CampaignRowData[] = [
     actionType: 'actions',
   },
 ];
+
+const EXTRA_CAMPAIGN_NAMES = [
+  'מבצע אביב',
+  'מבצע קיץ חם',
+  'מבצע סתיו',
+  'מבצע חורף',
+  'מבצע פורים',
+  'מבצע פסח',
+  'מבצע שבועות',
+  'מבצע קיץ 2',
+  'מבצע VIP',
+  'מבצע מועדון',
+  'מבצע דגל',
+  'מבצע בוקר',
+  'מבצע ערב',
+  'מבצע סוף שבוע',
+  'מבצע חג',
+  'מבצע מיוחד',
+  'מבצע מהיר',
+  'מבצע ארוך',
+  'מבצע כפול',
+  'מבצע משולב',
+  'מבצע אזורי',
+  'מבצע ארצי',
+  'מבצע דיגיטלי',
+  'מבצע פרימיום',
+];
+
+const EXTRA_CAMPAIGNS: CampaignRowData[] = EXTRA_CAMPAIGN_NAMES.map((name, index) => ({
+  id: `extra-${index + 10}`,
+  name,
+  startTime: '14:00',
+  startDate: `${String((index % 28) + 1).padStart(2, '0')}/02/2027`,
+  endTime: '22:00',
+  endDate: `${String((index % 28) + 5).padStart(2, '0')}/02/2027`,
+  version: `V1.${index % 9}`,
+  conferenceCount: (index % 5) + 1,
+  conferences: sampleConferences([`ועידת ${name}`]),
+  actionType: 'actions',
+}));
+
+export const MOCK_CAMPAIGNS: CampaignRowData[] = [...BASE_CAMPAIGNS, ...EXTRA_CAMPAIGNS];

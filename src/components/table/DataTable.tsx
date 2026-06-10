@@ -1,0 +1,166 @@
+import type { MouseEvent, ReactNode } from 'react';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import type { DataTableColumn, SortState } from '../../types/table';
+import { TABLE_ROWS_PER_PAGE } from '../../types/table';
+import { EmptyState } from '../common/EmptyState';
+import { ErrorState } from '../common/ErrorState';
+import { LoadingState } from '../common/LoadingState';
+import {
+  TABLE_ACTIONS_COLUMN_WIDTH,
+  tableCellInnerSx,
+  tableHeadCellSx,
+  tablePaginationSx,
+  tableSortLabelSx,
+} from './tableStyles';
+
+interface DataTableProps<C extends string> {
+  columns: DataTableColumn<C>[];
+  sort: SortState<C>;
+  onSort: (column: C) => void;
+  page: number;
+  totalRows: number;
+  onPageChange: (page: number) => void;
+  isLoading: boolean;
+  error: string | null;
+  isEmpty: boolean;
+  onRetry?: () => void;
+  emptyTitle: string;
+  emptyDescription: string;
+  emptyActionLabel?: string;
+  onEmptyAction?: () => void;
+  actionsColumnLabel?: string;
+  actionsColumnWidth?: number;
+  children: ReactNode;
+}
+
+export function DataTable<C extends string>({
+  columns,
+  sort,
+  onSort,
+  page,
+  totalRows,
+  onPageChange,
+  isLoading,
+  error,
+  isEmpty,
+  onRetry,
+  emptyTitle,
+  emptyDescription,
+  emptyActionLabel,
+  onEmptyAction,
+  actionsColumnLabel = 'פעולות',
+  actionsColumnWidth = TABLE_ACTIONS_COLUMN_WIDTH,
+  children,
+}: DataTableProps<C>) {
+  const columnCount = columns.length + 1;
+  const dataColumnWidth = `calc((100% - ${actionsColumnWidth}px) / ${columns.length})`;
+
+  const renderBody = () => {
+    if (isLoading) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columnCount}>
+            <LoadingState message="טוען..." />
+          </TableCell>
+        </TableRow>
+      );
+    }
+
+    if (error) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columnCount}>
+            <ErrorState message={error} onRetry={onRetry} />
+          </TableCell>
+        </TableRow>
+      );
+    }
+
+    if (isEmpty) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columnCount}>
+            <EmptyState
+              title={emptyTitle}
+              description={emptyDescription}
+              actionLabel={emptyActionLabel}
+              onAction={onEmptyAction}
+            />
+          </TableCell>
+        </TableRow>
+      );
+    }
+
+    return children;
+  };
+
+  return (
+    <TableContainer>
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <colgroup>
+          {columns.map(({ id }) => (
+            <col key={id} style={{ width: dataColumnWidth }} />
+          ))}
+          <col style={{ width: actionsColumnWidth }} />
+        </colgroup>
+        <TableHead>
+          <TableRow>
+            {columns.map(({ id, label, sortable = true }) => (
+              <TableCell
+                key={id}
+                align="right"
+                sortDirection={sort.column === id ? sort.direction : false}
+                sx={tableHeadCellSx}
+              >
+                {sortable ? (
+                  <TableSortLabel
+                    active={sort.column === id}
+                    direction={sort.column === id ? sort.direction : 'asc'}
+                    onClick={() => onSort(id)}
+                    sx={tableSortLabelSx}
+                  >
+                    {label}
+                  </TableSortLabel>
+                ) : (
+                  <Box sx={tableCellInnerSx}>{label}</Box>
+                )}
+              </TableCell>
+            ))}
+            <TableCell align="right" sx={tableHeadCellSx}>
+              <Box sx={tableCellInnerSx}>{actionsColumnLabel}</Box>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>{renderBody()}</TableBody>
+        {!isLoading && !error && !isEmpty ? (
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                colSpan={columnCount}
+                count={totalRows}
+                page={page}
+                onPageChange={(_: MouseEvent<HTMLButtonElement> | null, nextPage: number) =>
+                  onPageChange(nextPage)
+                }
+                rowsPerPage={TABLE_ROWS_PER_PAGE}
+                rowsPerPageOptions={[TABLE_ROWS_PER_PAGE]}
+                labelRowsPerPage="שורות בעמוד:"
+                labelDisplayedRows={({ from, to, count }) => `${from}-${to} מתוך ${count}`}
+                sx={tablePaginationSx}
+              />
+            </TableRow>
+          </TableFooter>
+        ) : null}
+      </Table>
+    </TableContainer>
+  );
+}

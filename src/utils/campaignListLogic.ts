@@ -5,21 +5,19 @@ import type {
   ConferenceData,
   SortDirection,
 } from '../types/campaign';
+import { compareNumbers, compareStrings, toggleSort as toggleSortState } from './sortLogic';
+
+export function toggleSort(
+  current: CampaignSortState,
+  column: CampaignSortColumn,
+): CampaignSortState {
+  return toggleSortState(current, column);
+}
 
 function parseDateTime(date: string, time: string): number {
   const [day, month, year] = date.split('/').map(Number);
   const [hours, minutes] = time.split(':').map(Number);
   return new Date(year, month - 1, day, hours, minutes).getTime();
-}
-
-function compareStrings(a: string, b: string, direction: SortDirection): number {
-  const result = a.localeCompare(b, 'he', { sensitivity: 'base' });
-  return direction === 'asc' ? result : -result;
-}
-
-function compareNumbers(a: number, b: number, direction: SortDirection): number {
-  const result = a - b;
-  return direction === 'asc' ? result : -result;
 }
 
 function compareByColumn(
@@ -93,19 +91,6 @@ export function filterCampaigns(rows: CampaignRowData[], query: string): Campaig
   }
 
   return rows.filter((row) => collectSearchableText(row).includes(normalized));
-}
-
-export function toggleSort(
-  current: CampaignSortState,
-  column: CampaignSortColumn,
-): CampaignSortState {
-  if (current.column === column) {
-    return {
-      column,
-      direction: current.direction === 'asc' ? 'desc' : 'asc',
-    };
-  }
-  return { column, direction: 'asc' };
 }
 
 export function syncConferenceCount(row: CampaignRowData): CampaignRowData {

@@ -2,6 +2,7 @@ import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { rtlColumnSx } from '../../theme/rtlLayout';
 
 interface EmptyStateProps {
   title?: string;
@@ -19,13 +20,12 @@ export function EmptyState({
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        ...rtlColumnSx,
+        alignItems: 'flex-end /* @noflip */',
         py: 8,
         px: 2,
         gap: 1,
+        width: '100%',
       }}
     >
       <InboxOutlinedIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />

@@ -3,6 +3,7 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { rtlColumnSx } from '../../theme/rtlLayout';
 
 // Error boundaries require a class component — no hooks equivalent in React.
 interface AppErrorBoundaryProps {
@@ -38,14 +39,14 @@ export class AppErrorBoundary extends Component<
       return (
         <Box
           sx={{
+            ...rtlColumnSx,
             minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: 'flex-end /* @noflip */',
             p: 3,
+            width: '100%',
           }}
         >
-          <Box sx={{ maxWidth: 480, width: '100%' }}>
+          <Box sx={{ maxWidth: 480, width: '100%', ...rtlColumnSx }}>
             <Alert severity="error" sx={{ mb: 2 }}>
               <Typography variant="subtitle1" gutterBottom>
                 אירעה שגיאה בלתי צפויה

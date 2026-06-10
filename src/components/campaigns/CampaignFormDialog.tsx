@@ -1,53 +1,35 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import type { Control, FieldErrors } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import {
   campaignFormSchema,
   defaultCampaignFormValues,
   type CampaignFormValues,
 } from '../../types/campaignFormSchema';
+import type { ConferenceAllocation } from '../../types/conferenceAllocationSchema';
 import type { CampaignRowData } from '../../types/campaign';
+import { fromCampaignRow, toCampaignRow } from '../../utils/campaignFormLogic';
+import { rtlTextSx } from '../../theme/rtlLayout';
+import { AllocatedConferencesSection } from '../shared/AllocatedConferencesSection';
 import {
-  formatConferencesForForm,
-  parseConferencesFromText,
-  syncConferenceCount,
-} from '../../utils/campaignListLogic';
+  formDialogContentSx,
+  formDialogFieldRowSx,
+  formDialogSlotProps,
+  DIALOG_TITLE_CONTENT_GAP,
+  textFieldWidthSx,
+} from '../shared/dialogLayout';
+import { DialogFormHeader } from '../shared/DialogFormHeader';
+import { PrimarySecondaryActions } from '../shared/PrimarySecondaryActions';
+import { CampaignFormDateTimeField } from './CampaignFormDateTimeField';
 
-function fromRow(row: CampaignRowData): CampaignFormValues {
-  return {
-    name: row.name,
-    startTime: row.startTime,
-    startDate: row.startDate,
-    endTime: row.endTime,
-    endDate: row.endDate,
-    version: row.version,
-    conferencesText: formatConferencesForForm(row.conferences),
-  };
-}
-
-function toRow(values: CampaignFormValues, existing?: CampaignRowData): CampaignRowData {
-  const conferences = parseConferencesFromText(values.conferencesText);
-  const base: CampaignRowData = {
-    id: existing?.id ?? `campaign-${Date.now()}`,
-    name: values.name.trim(),
-    startTime: values.startTime.trim(),
-    startDate: values.startDate.trim(),
-    endTime: values.endTime.trim(),
-    endDate: values.endDate.trim(),
-    version: values.version.trim(),
-    conferences,
-    conferenceCount: conferences.length,
-    actionType: existing?.actionType ?? 'actions',
-  };
-  return syncConferenceCount(base);
-}
+type ConferencesFormSlice = { conferences: ConferenceAllocation[] };
 
 interface CampaignFormDialogProps {
   open: boolean;
@@ -66,95 +48,118 @@ export function CampaignFormDialog({
 }: CampaignFormDialogProps) {
   const {
     register,
+    control,
     handleSubmit,
     reset,
-    formState: { errors },
+    watch,
+    setValue,
+    formState: { errors, isValid },
   } = useForm<CampaignFormValues>({
     resolver: zodResolver(campaignFormSchema),
     defaultValues: defaultCampaignFormValues,
+    mode: 'onChange',
   });
+
+  const startDate = watch('startDate');
+  const startTime = watch('startTime');
+  const endDate = watch('endDate');
+  const endTime = watch('endTime');
 
   useEffect(() => {
     if (open) {
-      reset(initialRow ? fromRow(initialRow) : defaultCampaignFormValues);
+      reset(initialRow ? fromCampaignRow(initialRow) : defaultCampaignFormValues);
     }
   }, [open, initialRow, reset]);
 
   const onSubmit = (values: CampaignFormValues) => {
-    onSave(toRow(values, initialRow));
+    onSave(toCampaignRow(values, initialRow));
   };
 
+  const title = mode === 'add' ? 'מבצע חדש' : 'עריכת מבצע';
+
   return (
-    <Dialog open={open} onClose={onClose} dir="rtl" fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} dir="rtl" slotProps={formDialogSlotProps}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <DialogTitle>{mode === 'add' ? 'הוספת מבצע' : 'עריכת מבצע'}</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ pt: 1 }}>
-            <TextField
-              label="שם המבצע"
-              fullWidth
-              error={Boolean(errors.name)}
-              helperText={errors.name?.message}
-              {...register('name')}
-            />
-            <Stack direction="row" spacing={2}>
+        <DialogFormHeader
+          title={title}
+          onClose={onClose}
+          titleVariant="h4"
+          titleBottomGap={DIALOG_TITLE_CONTENT_GAP}
+        />
+
+        <Box sx={formDialogContentSx}>
+          <Stack spacing={2.5}>
+            <Stack sx={formDialogFieldRowSx}>
               <TextField
-                label="תאריך התחלה"
-                placeholder="DD/MM/YYYY"
-                fullWidth
-                error={Boolean(errors.startDate)}
-                helperText={errors.startDate?.message}
-                {...register('startDate')}
+                label="שם המבצע"
+                required
+                sx={textFieldWidthSx}
+                error={Boolean(errors.name)}
+                helperText={errors.name?.message}
+                slotProps={{
+                  input: { sx: rtlTextSx },
+                  inputLabel: { sx: rtlTextSx },
+                }}
+                {...register('name')}
               />
               <TextField
-                label="שעת התחלה"
-                placeholder="HH:MM"
-                fullWidth
-                error={Boolean(errors.startTime)}
-                helperText={errors.startTime?.message}
-                {...register('startTime')}
-              />
-            </Stack>
-            <Stack direction="row" spacing={2}>
-              <TextField
-                label="תאריך סיום"
-                placeholder="DD/MM/YYYY"
-                fullWidth
-                error={Boolean(errors.endDate)}
-                helperText={errors.endDate?.message}
-                {...register('endDate')}
-              />
-              <TextField
-                label="שעת סיום"
-                placeholder="HH:MM"
-                fullWidth
-                error={Boolean(errors.endTime)}
-                helperText={errors.endTime?.message}
-                {...register('endTime')}
+                label="תיאור"
+                sx={textFieldWidthSx}
+                slotProps={{
+                  input: { sx: rtlTextSx },
+                  inputLabel: { sx: rtlTextSx },
+                }}
+                {...register('description')}
               />
             </Stack>
-            <TextField
-              label="גרסה"
-              fullWidth
-              error={Boolean(errors.version)}
-              helperText={errors.version?.message}
-              {...register('version')}
+
+            <Stack sx={formDialogFieldRowSx}>
+              <Box sx={textFieldWidthSx}>
+                <CampaignFormDateTimeField
+                  label="מועד התחלה"
+                  required
+                  date={startDate}
+                  time={startTime}
+                  onDateChange={(value) => setValue('startDate', value, { shouldValidate: true })}
+                  onTimeChange={(value) => setValue('startTime', value, { shouldValidate: true })}
+                  error={Boolean(errors.startDate || errors.startTime)}
+                  helperText={errors.startDate?.message ?? errors.startTime?.message}
+                />
+              </Box>
+              <Box sx={textFieldWidthSx}>
+                <CampaignFormDateTimeField
+                  label="מועד סיום"
+                  date={endDate}
+                  time={endTime}
+                  onDateChange={(value) => setValue('endDate', value, { shouldValidate: true })}
+                  onTimeChange={(value) => setValue('endTime', value, { shouldValidate: true })}
+                />
+              </Box>
+            </Stack>
+
+            <Divider />
+
+            <AllocatedConferencesSection
+              control={control as unknown as Control<ConferencesFormSlice>}
+              errors={errors as unknown as FieldErrors<ConferencesFormSlice>}
+              sectionTitle={(count) => `ועידות מוקצעות במבצע (${count})`}
+              conflictsColumnLabel="התנגשויות בתורן"
             />
-            <TextField
-              label="ועידות (שורה לכל ועידה, אופציונלי: שם | בנק)"
-              multiline
-              minRows={3}
-              fullWidth
-              {...register('conferencesText')}
+
+            <PrimarySecondaryActions
+              primary={
+                <Button type="submit" variant="contained" disabled={!isValid}>
+                  שמור
+                </Button>
+              }
+              secondary={
+                <Button variant="outlined" onClick={onClose}>
+                  ביטול
+                </Button>
+              }
             />
           </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={onClose}>ביטול</Button>
-          <Button type="submit" variant="contained">
-            {mode === 'add' ? 'הוספה' : 'שמירה'}
-          </Button>
-        </DialogActions>
+        </Box>
       </form>
     </Dialog>
   );

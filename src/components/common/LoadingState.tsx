@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+import { rtlColumnSx } from '../../theme/rtlLayout';
 
 interface LoadingStateProps {
   message?: string;
@@ -10,12 +11,11 @@ export function LoadingState({ message = 'טוען...' }: LoadingStateProps) {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        ...rtlColumnSx,
+        alignItems: 'flex-end /* @noflip */',
         py: 8,
         gap: 2,
+        width: '100%',
       }}
       role="status"
       aria-live="polite"

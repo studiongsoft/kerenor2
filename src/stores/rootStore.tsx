@@ -1,13 +1,19 @@
 import { createContext, useContext, type ReactNode } from 'react';
+import { BankStore } from './BankStore';
 import { CampaignStore } from './CampaignStore';
+import { ConferenceStore } from './ConferenceStore';
 
 export interface RootStore {
   campaignStore: CampaignStore;
+  bankStore: BankStore;
+  conferenceStore: ConferenceStore;
 }
 
 export function createRootStore(): RootStore {
   return {
     campaignStore: new CampaignStore(),
+    bankStore: new BankStore(),
+    conferenceStore: new ConferenceStore(),
   };
 }
 
@@ -33,4 +39,12 @@ export function useRootStore(): RootStore {
 
 export function useCampaignStore(): CampaignStore {
   return useRootStore().campaignStore;
+}
+
+export function useBankStore(): BankStore {
+  return useRootStore().bankStore;
+}
+
+export function useConferenceStore(): ConferenceStore {
+  return useRootStore().conferenceStore;
 }

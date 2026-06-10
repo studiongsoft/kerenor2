@@ -1,0 +1,78 @@
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
+import { APP_HEADER_HEIGHT } from '../../config/navigation';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { Link as RouterLink } from 'react-router-dom';
+import { UserAvatar } from './UserAvatar';
+
+export function AppHeader() {
+  return (
+    <AppBar
+      position="fixed"
+      color="transparent"
+      sx={{
+        width: '100%',
+        zIndex: (theme) => theme.zIndex.drawer + 2,
+        backgroundColor: 'background.paper',
+        borderBottom: 1,
+        borderColor: 'divider',
+      }}
+    >
+      <Toolbar sx={{ px: 3, minHeight: APP_HEADER_HEIGHT, height: APP_HEADER_HEIGHT }}>
+        <Stack
+          component={RouterLink}
+          to="/"
+          direction="row"
+          spacing={1}
+          aria-label="מסך הבית"
+          sx={{
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: 'inherit',
+            borderRadius: 1,
+            '&:hover': {
+              opacity: 0.85,
+            },
+          }}
+        >
+          <LayersOutlinedIcon color="primary" fontSize="small" />
+          <Typography variant="h6" component="span" sx={{ fontWeight: 600 }}>
+            ועידון
+          </Typography>
+        </Stack>
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Stack
+          direction="row"
+          spacing={1.5}
+          sx={{
+            direction: 'ltr /* @noflip */',
+            alignItems: 'center',
+          }}
+        >
+          <UserAvatar />
+          <IconButton
+            aria-label="יציאה"
+            size="small"
+            sx={{
+              color: 'text.secondary',
+              p: 0.75,
+              '&:hover': {
+                color: 'text.primary',
+                bgcolor: 'action.hover',
+              },
+            }}
+          >
+            <LogoutOutlinedIcon fontSize="small" />
+          </IconButton>
+        </Stack>
+      </Toolbar>
+    </AppBar>
+  );
+}

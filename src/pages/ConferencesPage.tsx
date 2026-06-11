@@ -16,6 +16,7 @@ import { DataTable } from '../components/table/DataTable';
 import { PageHeader } from '../components/table/PageHeader';
 import { TableIconActions } from '../components/table/TableIconActions';
 import { tableBodyCellSx, tableCellContentSx, tableCellInnerSx, tableCellLtrContentSx, tablePrimaryCellLtrContentSx } from '../components/table/tableStyles';
+import { tableRowPhaseSx } from '../components/table/tableRowAnimations';
 import { useSnackbar } from '../components/common/AppSnackbarProvider';
 import { useConferenceStore } from '../stores/rootStore';
 import type { ConferenceRowData, ConferenceSortColumn } from '../types/conference';
@@ -30,7 +31,7 @@ const COLUMNS: DataTableColumn<ConferenceSortColumn>[] = [
 
 function ConferencesPageBase() {
   const store = useConferenceStore();
-  const { showSnackbar } = useSnackbar();
+  const { showItemToast } = useSnackbar();
 
   useEffect(() => {
     store.loadConferences();
@@ -41,10 +42,14 @@ function ConferencesPageBase() {
       const wasEdit = Boolean(store.editingRow);
       const ok = await store.saveConference(row);
       if (ok) {
-        showSnackbar(wasEdit ? 'הועידה עודכנה בהצלחה' : 'הועידה נוספה בהצלחה', 'success');
+        showItemToast({
+          entity: 'conference',
+          action: wasEdit ? 'edit' : 'add',
+          name: row.number,
+        });
       }
     },
-    [showSnackbar, store],
+    [showItemToast, store],
   );
 
   const handleAdd = useCallback(() => {
@@ -59,13 +64,13 @@ function ConferencesPageBase() {
   );
 
   const handleDelete = useCallback(
-    async (id: string) => {
+    async (id: string, name: string) => {
       const ok = await store.deleteConference(id);
       if (ok) {
-        showSnackbar('הועידה נמחקה בהצלחה', 'success');
+        showItemToast({ entity: 'conference', action: 'delete', name });
       }
     },
-    [showSnackbar, store],
+    [showItemToast, store],
   );
 
   const { pending, requestDelete, cancelDelete, confirmDelete } = useDeleteConfirm(handleDelete);
@@ -116,9 +121,10 @@ function ConferencesPageBase() {
         emptyDescription={
           store.searchQuery ? 'נסו לשנות את מילות החיפוש' : 'הוסיפו ועידה חדשה כדי להתחיל'
         }
-      >
-        {store.paginatedRows.map((row) => (
-          <TableRow key={row.id}>
+        rows={store.paginatedRows}
+        getRowKey={(row) => row.id}
+        renderRow={(row, phase) => (
+          <TableRow sx={tableRowPhaseSx(phase)}>
             <TableCell align="right" sx={tableBodyCellSx}>
               <Box sx={tableCellInnerSx}>
                 <Link
@@ -168,8 +174,8 @@ function ConferencesPageBase() {
               </Box>
             </TableCell>
           </TableRow>
-        ))}
-      </DataTable>
+        )}
+      />
 
       <ConferenceFormDialog
         open={store.dialogOpen}

@@ -1,8 +1,10 @@
+import type { ReactElement } from 'react';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 
 interface TableIconActionsProps {
   onDownload?: () => void;
@@ -10,6 +12,32 @@ interface TableIconActionsProps {
   onDelete?: () => void;
   disableEdit?: boolean;
   disableDelete?: boolean;
+}
+
+const tooltipSlotProps = {
+  popper: { dir: 'rtl' as const },
+  tooltip: {
+    sx: {
+      fontSize: 12,
+      lineHeight: 1.4,
+      py: 0.5,
+      px: 1,
+    },
+  },
+};
+
+function ActionTooltip({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactElement;
+}) {
+  return (
+    <Tooltip title={title} placement="top" enterDelay={300} slotProps={tooltipSlotProps}>
+      {children}
+    </Tooltip>
+  );
 }
 
 export function TableIconActions({
@@ -36,27 +64,37 @@ export function TableIconActions({
         },
       }}
     >
-      <IconButton size="small" color="inherit" aria-label="הורדה" onClick={onDownload}>
-        <DownloadOutlinedIcon fontSize="small" />
-      </IconButton>
-      <IconButton
-        size="small"
-        color="inherit"
-        aria-label="עריכה"
-        disabled={disableEdit}
-        onClick={onEdit}
-      >
-        <EditOutlinedIcon fontSize="small" />
-      </IconButton>
-      <IconButton
-        size="small"
-        color="inherit"
-        aria-label="מחיקה"
-        disabled={disableDelete}
-        onClick={onDelete}
-      >
-        <DeleteOutlineOutlinedIcon fontSize="small" />
-      </IconButton>
+      <ActionTooltip title="הורדה">
+        <IconButton size="small" color="inherit" aria-label="הורדה" onClick={onDownload}>
+          <DownloadOutlinedIcon fontSize="small" />
+        </IconButton>
+      </ActionTooltip>
+      <ActionTooltip title="עריכה">
+        <span style={{ display: 'inline-flex' }}>
+          <IconButton
+            size="small"
+            color="inherit"
+            aria-label="עריכה"
+            disabled={disableEdit}
+            onClick={onEdit}
+          >
+            <EditOutlinedIcon fontSize="small" />
+          </IconButton>
+        </span>
+      </ActionTooltip>
+      <ActionTooltip title="מחיקה">
+        <span style={{ display: 'inline-flex' }}>
+          <IconButton
+            size="small"
+            color="inherit"
+            aria-label="מחיקה"
+            disabled={disableDelete}
+            onClick={onDelete}
+          >
+            <DeleteOutlineOutlinedIcon fontSize="small" />
+          </IconButton>
+        </span>
+      </ActionTooltip>
     </Stack>
   );
 }

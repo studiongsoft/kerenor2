@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router-dom';
+import { microAppearSx } from '../../theme/microAnimations';
 import { UserAvatar } from './UserAvatar';
 
 export function AppHeader() {
@@ -31,6 +32,7 @@ export function AppHeader() {
           spacing={1}
           aria-label="מסך הבית"
           sx={{
+            ...microAppearSx({ variant: 'fadeIn' }),
             alignItems: 'center',
             textDecoration: 'none',
             color: 'inherit',
@@ -61,6 +63,7 @@ export function AppHeader() {
             aria-label="יציאה"
             size="small"
             sx={{
+              ...microAppearSx({ variant: 'fadeIn', delayMs: 140 }),
               color: 'text.secondary',
               p: 0.75,
               '&:hover': {

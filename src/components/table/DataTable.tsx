@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import { Fragment, type MouseEvent, type ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +15,8 @@ import { EmptyState } from '../common/EmptyState';
 import type { EmptyStateIcon } from '../common/emptyStateIcons';
 import { ErrorState } from '../common/ErrorState';
 import { LoadingState } from '../common/LoadingState';
+import type { TableRowPresencePhase } from './tableRowAnimations';
+import { usePresenceList } from './usePresenceList';
 import {
   TABLE_ACTIONS_COLUMN_WIDTH,
   tableCellInnerSx,
@@ -24,7 +26,7 @@ import {
   tableSortLabelSx,
 } from './tableStyles';
 
-interface DataTableProps<C extends string> {
+interface DataTableProps<C extends string, T> {
   columns: DataTableColumn<C>[];
   sort: SortState<C>;
   onSort: (column: C) => void;
@@ -42,10 +44,12 @@ interface DataTableProps<C extends string> {
   onEmptyAction?: () => void;
   actionsColumnLabel?: string;
   actionsColumnWidth?: number;
-  children: ReactNode;
+  rows: T[];
+  getRowKey: (row: T) => string;
+  renderRow: (row: T, phase: TableRowPresencePhase) => ReactNode;
 }
 
-export function DataTable<C extends string>({
+export function DataTable<C extends string, T>({
   columns,
   sort,
   onSort,
@@ -63,10 +67,13 @@ export function DataTable<C extends string>({
   onEmptyAction,
   actionsColumnLabel = 'פעולות',
   actionsColumnWidth = TABLE_ACTIONS_COLUMN_WIDTH,
-  children,
-}: DataTableProps<C>) {
+  rows,
+  getRowKey,
+  renderRow,
+}: DataTableProps<C, T>) {
   const columnCount = columns.length + 1;
   const dataColumnWidth = `calc((100% - ${actionsColumnWidth}px) / ${columns.length})`;
+  const presence = usePresenceList(rows, getRowKey);
 
   const renderBody = () => {
     if (isLoading) {
@@ -105,7 +112,9 @@ export function DataTable<C extends string>({
       );
     }
 
-    return children;
+    return presence.map(({ key, item, phase }) => (
+      <Fragment key={key}>{renderRow(item, phase)}</Fragment>
+    ));
   };
 
   return (

@@ -72,7 +72,7 @@ export function ConferenceFormDialog({
         />
 
         <Box sx={formDialogContentSx}>
-          <Stack spacing={2.5}>
+          <Stack spacing={3}>
             <TextField
               label="מספר (7 ספרות)"
               required

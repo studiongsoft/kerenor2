@@ -20,9 +20,9 @@ export const CONFERENCE_FORM_DIALOG_WIDTH = 474;
 /** Gap between popup search field and adjacent action button */
 export const POPUP_SEARCH_ACTION_GAP = 16;
 /** Gap between dialog title and first form field */
-export const DIALOG_TITLE_CONTENT_GAP = 32;
+export const DIALOG_TITLE_CONTENT_GAP = 24;
 /** Inset from dialog border to title / footer actions */
-export const DIALOG_EDGE_PADDING = 32;
+export const DIALOG_EDGE_PADDING = 24;
 /** Popup tables (e.g. allocated conferences) */
 export const POPUP_TABLE_MIN_HEIGHT = 190;
 /** Single-line input text/placeholder line box — vertically centered in CONTROL_HEIGHT */
@@ -58,6 +58,9 @@ export const POPUP_SHADOW = [
   '0 4px 5px 0 rgba(0, 0, 0, 0.14)',
   '0 2px 4px -1px rgba(0, 0, 0, 0.2)',
 ].join(', ');
+
+/** Dialog / popup corner radius */
+export const POPUP_BORDER_RADIUS = 12;
 
 /** Figma tab height (42px) — `theme.spacing(5.25)` on the default 8px grid */
 const TAB_HEIGHT_SPACING = 5.25;
@@ -597,7 +600,7 @@ export const kerenOrThemeOptions = {
       },
       styleOverrides: {
         paper: ({ theme }: ThemeCallback) => ({
-          borderRadius: '4px',
+          borderRadius: `${POPUP_BORDER_RADIUS}px`,
           boxShadow: POPUP_SHADOW,
           ...theme.applyStyles('dark', {
             backgroundColor: DARK_SURFACE.popup,
@@ -834,7 +837,7 @@ export const kerenOrThemeOptions = {
           fontSize: '1.25rem',
           fontWeight: 600,
           lineHeight: 1.334,
-          padding: '24px 32px 16px',
+          padding: '24px 24px 16px',
           textAlign: 'right',
         },
       },
@@ -842,7 +845,7 @@ export const kerenOrThemeOptions = {
     MuiDialogContent: {
       styleOverrides: {
         root: {
-          padding: '8px 32px',
+          padding: '8px 24px',
           textAlign: 'right',
         },
       },
@@ -850,7 +853,7 @@ export const kerenOrThemeOptions = {
     MuiDialogActions: {
       styleOverrides: {
         root: {
-          padding: '16px 32px 24px',
+          padding: '16px 24px 24px',
           gap: 12,
           direction: 'ltr /* @noflip */',
           flexDirection: 'row',

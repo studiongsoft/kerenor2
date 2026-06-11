@@ -73,7 +73,6 @@ const SpeedDialRoot = styled('div', {
       },
       {
         props: {
-          direction: 'down',
         },
         style: {
           flexDirection: 'column',

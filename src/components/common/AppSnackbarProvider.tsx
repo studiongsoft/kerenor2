@@ -6,36 +6,49 @@ import {
   type ReactNode,
   type SyntheticEvent,
 } from 'react';
-import Alert from '@mui/material/Alert';
+import Slide from '@mui/material/Slide';
+import type { SlideProps } from '@mui/material/Slide';
 import Snackbar from '@mui/material/Snackbar';
+import { TOAST_TOP_OFFSET } from '../../config/navigation';
+import { AppToast } from './AppToast';
+import {
+  formatItemToastMessage,
+  type ItemToastPayload,
+} from './toastMessages';
 
-export type SnackbarSeverity = 'success' | 'error' | 'info' | 'warning';
+/** Default 4s + 25% */
+const TOAST_AUTO_HIDE_MS = 5000;
 
-interface SnackbarMessage {
-  message: string;
-  severity: SnackbarSeverity;
+interface SnackbarMessage extends ItemToastPayload {
+  text: string;
 }
 
 interface SnackbarContextValue {
-  showSnackbar: (message: string, severity?: SnackbarSeverity) => void;
+  showItemToast: (payload: ItemToastPayload) => void;
 }
 
 const SnackbarContext = createContext<SnackbarContextValue | null>(null);
 
+function SlideDown(props: SlideProps) {
+  return <Slide {...props} direction="down" />;
+}
+
 export function AppSnackbarProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState<SnackbarMessage>({
-    message: '',
-    severity: 'info',
+    entity: 'campaign',
+    action: 'add',
+    name: '',
+    text: '',
   });
 
-  const showSnackbar = useCallback(
-    (message: string, severity: SnackbarSeverity = 'info') => {
-      setCurrent({ message, severity });
-      setOpen(true);
-    },
-    [],
-  );
+  const showItemToast = useCallback((payload: ItemToastPayload) => {
+    setCurrent({
+      ...payload,
+      text: formatItemToastMessage(payload),
+    });
+    setOpen(true);
+  }, []);
 
   const handleClose = useCallback((_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -44,18 +57,31 @@ export function AppSnackbarProvider({ children }: { children: ReactNode }) {
     setOpen(false);
   }, []);
 
+  const handleDismiss = useCallback(() => {
+    setOpen(false);
+  }, []);
+
   return (
-    <SnackbarContext.Provider value={{ showSnackbar }}>
+    <SnackbarContext.Provider value={{ showItemToast }}>
       {children}
       <Snackbar
         open={open}
-        autoHideDuration={4000}
+        autoHideDuration={TOAST_AUTO_HIDE_MS}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        slots={{ transition: SlideDown }}
+        dir="rtl"
+        sx={{
+          top: `${TOAST_TOP_OFFSET}px !important`,
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          '@media (prefers-reduced-motion: reduce)': {
+            '& .MuiSlide-root': {
+              transition: 'none !important',
+            },
+          },
+        }}
       >
-        <Alert onClose={handleClose} severity={current.severity} variant="filled" sx={{ width: '100%' }}>
-          {current.message}
-        </Alert>
+        <AppToast message={current.text} action={current.action} onDismiss={handleDismiss} />
       </Snackbar>
     </SnackbarContext.Provider>
   );

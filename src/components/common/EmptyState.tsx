@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { MicroAppear } from './MicroAppear';
 import { useResolvedColorMode } from '../../theme/useResolvedColorMode';
 import { rtlColumnSx } from '../../theme/rtlLayout';
 import {
@@ -28,7 +29,8 @@ export function EmptyState({
   const colorMode = useResolvedColorMode();
 
   return (
-    <Box
+    <MicroAppear
+      variant="fadeUp"
       sx={{
         ...rtlColumnSx,
         alignItems: 'center',
@@ -65,6 +67,6 @@ export function EmptyState({
           {actionLabel}
         </Button>
       ) : null}
-    </Box>
+    </MicroAppear>
   );
 }

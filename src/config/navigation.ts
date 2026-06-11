@@ -10,6 +10,12 @@ export const SIDEBAR_WIDTH = 240;
 /** AppBar toolbar height */
 export const APP_HEADER_HEIGHT = 64;
 
+/** Gap between AppBar bottom and top toast alerts */
+export const TOAST_TOP_GAP = 24;
+
+/** Viewport offset for fixed top toast (below header + gap) */
+export const TOAST_TOP_OFFSET = APP_HEADER_HEIGHT + TOAST_TOP_GAP;
+
 /** Gap between header bottom and page title / first sidebar item */
 export const HEADER_CONTENT_GAP = 56;
 

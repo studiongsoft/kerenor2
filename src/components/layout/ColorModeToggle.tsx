@@ -6,13 +6,11 @@ import colorModeToggleLight from '../../assets/color-mode-toggle-light.png';
 import { useResolvedColorMode } from '../../theme/useResolvedColorMode';
 
 /** Figma segmented pill — sun (light) | moon (dark), LTR segment order regardless of sidebar RTL */
-const TOGGLE_WIDTH = 112;
-const TOGGLE_HEIGHT = 44;
+const TOGGLE_WIDTH = 95.2;
+const TOGGLE_HEIGHT = 37.4;
 
 const segmentButtonSx = (isActive: boolean, isDark: boolean) => ({
-  position: 'absolute',
-  top: '0 /* @noflip */',
-  width: '50%',
+  flex: 1,
   height: '100%',
   borderRadius: 0,
   minWidth: 0,
@@ -39,6 +37,8 @@ export function ColorModeToggle() {
       className="KerenOr-colorModeToggle"
       sx={{
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'row /* @noflip */',
         width: TOGGLE_WIDTH,
         height: TOGGLE_HEIGHT,
         flexShrink: 0,
@@ -51,6 +51,8 @@ export function ColorModeToggle() {
         src={isDark ? colorModeToggleDark : colorModeToggleLight}
         alt=""
         sx={{
+          position: 'absolute',
+          inset: 0,
           width: TOGGLE_WIDTH,
           height: TOGGLE_HEIGHT,
           display: 'block',
@@ -64,10 +66,7 @@ export function ColorModeToggle() {
         onClick={() => setMode('light')}
         disableRipple
         className="KerenOr-colorModeToggle-light"
-        sx={{
-          ...segmentButtonSx(!isDark, isDark),
-          left: '0 /* @noflip */',
-        }}
+        sx={segmentButtonSx(!isDark, isDark)}
       />
       <IconButton
         aria-label="מצב כהה"
@@ -75,10 +74,7 @@ export function ColorModeToggle() {
         onClick={() => setMode('dark')}
         disableRipple
         className="KerenOr-colorModeToggle-dark"
-        sx={{
-          ...segmentButtonSx(isDark, isDark),
-          right: '0 /* @noflip */',
-        }}
+        sx={segmentButtonSx(isDark, isDark)}
       />
     </Box>
   );

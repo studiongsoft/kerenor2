@@ -12,7 +12,7 @@ interface PendingDelete {
   name: string;
 }
 
-export function useDeleteConfirm(onDelete: (id: string) => void | Promise<void>) {
+export function useDeleteConfirm(onDelete: (id: string, name: string) => void | Promise<void>) {
   const [pending, setPending] = useState<PendingDelete | null>(null);
 
   const requestDelete = useCallback((id: string, name: string) => {
@@ -27,7 +27,7 @@ export function useDeleteConfirm(onDelete: (id: string) => void | Promise<void>)
     if (!pending) {
       return;
     }
-    await onDelete(pending.id);
+    await onDelete(pending.id, pending.name);
     setPending(null);
   }, [onDelete, pending]);
 

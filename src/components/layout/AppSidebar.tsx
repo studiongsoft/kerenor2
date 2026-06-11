@@ -9,6 +9,8 @@ import { NavLink } from 'react-router-dom';
 import { ColorModeToggle } from './ColorModeToggle';
 import { SidebarNavIcon } from './SidebarNavIcon';
 import { MAIN_NAV_ITEMS, NAV_TOP_OFFSET, SIDEBAR_WIDTH } from '../../config/navigation';
+import { MicroAppear } from '../common/MicroAppear';
+import { microAppearStagger } from '../../theme/microAnimations';
 import { useResolvedColorMode } from '../../theme/useResolvedColorMode';
 
 export function AppSidebar() {
@@ -43,9 +45,10 @@ export function AppSidebar() {
         aria-label="ניווט ראשי"
         sx={{ flex: 1, pt: `${NAV_TOP_OFFSET}px`, px: 0 }}
       >
-        {MAIN_NAV_ITEMS.map(({ path, label, icons }) => (
+        {MAIN_NAV_ITEMS.map(({ path, label, icons }, index) => (
           <ListItem key={path} disablePadding>
-            <NavLink to={path} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+            <MicroAppear variant="fadeIn" delayMs={microAppearStagger(index)} sx={{ width: '100%' }}>
+              <NavLink to={path} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
               {({ isActive }) => (
                 <ListItemButton selected={isActive} sx={{ px: 2, py: 1.5 }}>
                   <ListItemIcon sx={{ minWidth: 40, color: 'inherit' }}>
@@ -64,13 +67,16 @@ export function AppSidebar() {
                 </ListItemButton>
               )}
             </NavLink>
+            </MicroAppear>
           </ListItem>
         ))}
       </List>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', pb: 3, pt: 2, borderRadius: 0 }}>
-        <ColorModeToggle />
-      </Box>
+      <MicroAppear variant="fadeIn" delayMs={microAppearStagger(MAIN_NAV_ITEMS.length)}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', pb: 3, pt: 2, borderRadius: 0 }}>
+          <ColorModeToggle />
+        </Box>
+      </MicroAppear>
     </Drawer>
   );
 }

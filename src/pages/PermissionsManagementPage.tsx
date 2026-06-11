@@ -26,7 +26,7 @@ const COLUMNS: DataTableColumn<CampaignSortColumn>[] = [
 
 function PermissionsManagementPageBase() {
   const store = useCampaignStore();
-  const { showSnackbar } = useSnackbar();
+  const { showItemToast } = useSnackbar();
 
   useEffect(() => {
     store.loadCampaigns();
@@ -37,20 +37,24 @@ function PermissionsManagementPageBase() {
       const wasEdit = Boolean(store.editingRow);
       const ok = await store.saveCampaign(row);
       if (ok) {
-        showSnackbar(wasEdit ? 'המבצע עודכן בהצלחה' : 'המבצע נוסף בהצלחה', 'success');
+        showItemToast({
+          entity: 'campaign',
+          action: wasEdit ? 'edit' : 'add',
+          name: row.name,
+        });
       }
     },
-    [showSnackbar, store],
+    [showItemToast, store],
   );
 
   const handleDelete = useCallback(
-    async (id: string) => {
+    async (id: string, name: string) => {
       const ok = await store.deleteCampaign(id);
       if (ok) {
-        showSnackbar('המבצע נמחק בהצלחה', 'success');
+        showItemToast({ entity: 'campaign', action: 'delete', name });
       }
     },
-    [showSnackbar, store],
+    [showItemToast, store],
   );
 
   const { pending, requestDelete, cancelDelete, confirmDelete } = useDeleteConfirm(handleDelete);
@@ -117,17 +121,18 @@ function PermissionsManagementPageBase() {
         }
         emptyActionLabel={store.canManage && !store.searchQuery ? 'הוספת מבצע' : undefined}
         onEmptyAction={store.canManage && !store.searchQuery ? handleAdd : undefined}
-      >
-        {store.paginatedRows.map((row) => (
+        rows={store.paginatedRows}
+        getRowKey={(row) => row.id}
+        renderRow={(row, phase) => (
           <CampaignTableRow
-            key={row.id}
             row={row}
+            phase={phase}
             canManage={store.canManage}
             onEdit={handleEdit}
             onDelete={requestDelete}
           />
-        ))}
-      </DataTable>
+        )}
+      />
 
       <CampaignFormDialog
         open={store.dialogOpen}

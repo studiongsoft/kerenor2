@@ -2,7 +2,7 @@
 
 | שדה | ערך |
 |-----|-----|
-| עדכון אחרון | 2026-06-10 |
+| עדכון אחרון | 2026-06-10 (size −15%) |
 | קוד | `src/components/layout/ColorModeToggle.tsx` |
 
 ## התאמה ל-Figma (RTL)
@@ -19,6 +19,12 @@
 | הפעלה | `useColorScheme().setMode` | MUI color schemes |
 
 ## שינויים
+
+### 2026-06-10 — הקטנת גודל 15%
+
+- **קבצים:** `ColorModeToggle.tsx`
+- **מה:** `TOGGLE_WIDTH` 112 → 95.2, `TOGGLE_HEIGHT` 44 → 37.4
+- **למה:** התאמת גודל ה-toggle בסרגל הצד
 
 ### 2026-06-10 — מצב כהה + עיצוב מחדש
 

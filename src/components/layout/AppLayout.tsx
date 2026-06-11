@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Outlet, useLocation } from 'react-router-dom';
 import { NAV_TOP_OFFSET, SIDEBAR_WIDTH } from '../../config/navigation';
+import { MicroAppear } from '../common/MicroAppear';
 import { rtlTextSx } from '../../theme/rtlLayout';
 import { AppHeader } from './AppHeader';
 import { AppSidebar } from './AppSidebar';
@@ -25,7 +26,9 @@ export function AppLayout() {
         }}
       >
         <Container maxWidth="lg" sx={{ pb: 3, ...rtlTextSx }}>
-          <Outlet />
+          <MicroAppear key={pathname} variant="fadeUp" delayMs={60}>
+            <Outlet />
+          </MicroAppear>
         </Container>
       </Box>
     </Box>

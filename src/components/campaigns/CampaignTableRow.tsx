@@ -2,9 +2,11 @@ import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import TableCell from '@mui/material/TableCell';
+import type { TableRowProps } from '@mui/material/TableRow';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { TableIconActions } from '../table/TableIconActions';
+import { tableRowPhaseSx, type TableRowPresencePhase } from '../table/tableRowAnimations';
 import {
   tableActionsCellSx,
   tableBodyCellSx,
@@ -20,11 +22,12 @@ import type { CampaignRowData } from '../../types/campaign';
 
 export type { CampaignRowData };
 
-interface CampaignTableRowProps {
+interface CampaignTableRowProps extends TableRowProps {
   row: CampaignRowData;
   canManage: boolean;
   onEdit: (row: CampaignRowData) => void;
   onDelete: (id: string, name: string) => void;
+  phase: TableRowPresencePhase;
 }
 
 function DateTimeText({ time, date }: { time: string; date: string }) {
@@ -41,9 +44,17 @@ function DateTimeText({ time, date }: { time: string; date: string }) {
   );
 }
 
-export function CampaignTableRow({ row, canManage, onEdit, onDelete }: CampaignTableRowProps) {
+export function CampaignTableRow({
+  row,
+  canManage,
+  onEdit,
+  onDelete,
+  phase,
+  sx,
+  ...tableRowProps
+}: CampaignTableRowProps) {
   return (
-    <TableRow>
+    <TableRow sx={[tableRowPhaseSx(phase), ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]} {...tableRowProps}>
       <TableCell align="right" sx={tableBodyCellSx}>
         <Box sx={tableCellInnerSx}>
           <Link

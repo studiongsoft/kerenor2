@@ -1,10 +1,12 @@
 import { type ReactNode } from 'react';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { ThemeProvider } from '@mui/material/styles';
 import { rtlCache } from '@studiongsoft/design-lead';
 import { createKerenOrTheme } from './createKerenOrTheme';
+import { microAnimationGlobalStyles } from './microAnimations';
 
 export const KEREN_OR_MODE_STORAGE_KEY = 'keren-or-color-mode';
 
@@ -27,6 +29,7 @@ export function KerenOrThemeProvider({ children }: { children: ReactNode }) {
         >
           <div dir="rtl" lang="he">
             <CssBaseline />
+            <GlobalStyles styles={microAnimationGlobalStyles} />
             {children}
           </div>
         </ThemeProvider>

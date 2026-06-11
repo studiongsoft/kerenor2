@@ -16,6 +16,7 @@ import { DeleteConfirmDialog, useDeleteConfirm } from '../components/shared/Dele
 import { DataTable } from '../components/table/DataTable';
 import { PageHeader } from '../components/table/PageHeader';
 import { TableIconActions } from '../components/table/TableIconActions';
+import { tableRowPhaseSx } from '../components/table/tableRowAnimations';
 import {
   tableBodyCellSx,
   tableCellContentSx,
@@ -41,7 +42,7 @@ const COLUMNS: DataTableColumn<BankSortColumn>[] = [
 
 function BanksPageBase() {
   const store = useBankStore();
-  const { showSnackbar } = useSnackbar();
+  const { showItemToast } = useSnackbar();
 
   useEffect(() => {
     store.loadBanks();
@@ -52,10 +53,14 @@ function BanksPageBase() {
       const wasEdit = Boolean(store.editingRow);
       const ok = await store.saveBank(row);
       if (ok) {
-        showSnackbar(wasEdit ? 'הבנק עודכן בהצלחה' : 'הבנק נוסף בהצלחה', 'success');
+        showItemToast({
+          entity: 'bank',
+          action: wasEdit ? 'edit' : 'add',
+          name: row.name,
+        });
       }
     },
-    [showSnackbar, store],
+    [showItemToast, store],
   );
 
   const handleAdd = useCallback(() => {
@@ -70,13 +75,13 @@ function BanksPageBase() {
   );
 
   const handleDelete = useCallback(
-    async (id: string) => {
+    async (id: string, name: string) => {
       const ok = await store.deleteBank(id);
       if (ok) {
-        showSnackbar('הבנק נמחק בהצלחה', 'success');
+        showItemToast({ entity: 'bank', action: 'delete', name });
       }
     },
-    [showSnackbar, store],
+    [showItemToast, store],
   );
 
   const { pending, requestDelete, cancelDelete, confirmDelete } = useDeleteConfirm(handleDelete);
@@ -127,9 +132,10 @@ function BanksPageBase() {
         emptyDescription={
           store.searchQuery ? 'נסו לשנות את מילות החיפוש' : 'הוסיפו בנק חדש כדי להתחיל'
         }
-      >
-        {store.paginatedRows.map((row) => (
-          <TableRow key={row.id}>
+        rows={store.paginatedRows}
+        getRowKey={(row) => row.id}
+        renderRow={(row, phase) => (
+          <TableRow sx={tableRowPhaseSx(phase)}>
             <TableCell align="right" sx={tableBodyCellSx}>
               <Box sx={tableCellInnerSx}>
                 <Link
@@ -183,8 +189,8 @@ function BanksPageBase() {
               </Box>
             </TableCell>
           </TableRow>
-        ))}
-      </DataTable>
+        )}
+      />
 
       <BankFormDialog
         open={store.dialogOpen}

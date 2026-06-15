@@ -1,5 +1,4 @@
 import {
-  CAMPAIGN_FORM_DIALOG_HEIGHT,
   CAMPAIGN_FORM_DIALOG_WIDTH,
   CONFERENCE_FORM_DIALOG_WIDTH,
   DIALOG_EDGE_PADDING,
@@ -11,14 +10,16 @@ import { rtlTextSx } from '../../theme/rtlLayout';
 
 export { DIALOG_TITLE_CONTENT_GAP, TEXT_FIELD_WIDTH };
 
-/** Large form popup — campaign (900×645) */
+/** Vertical gap between major form sections (32px) */
+export const FORM_DIALOG_BODY_STACK_SPACING = 4;
+
+/** Large form popup — campaign (900px wide, height fits content) */
 export const formDialogSlotProps = {
   paper: {
     sx: {
       width: CAMPAIGN_FORM_DIALOG_WIDTH,
       maxWidth: CAMPAIGN_FORM_DIALOG_WIDTH,
-      height: CAMPAIGN_FORM_DIALOG_HEIGHT,
-      maxHeight: CAMPAIGN_FORM_DIALOG_HEIGHT,
+      height: 'fit-content',
     },
   },
 } as const;
@@ -58,8 +59,10 @@ export const confirmDialogSlotProps = {
 
 export const formDialogContentSx = {
   px: `${DIALOG_EDGE_PADDING}px`,
+  pt: `${DIALOG_EDGE_PADDING}px`,
   pb: `${DIALOG_EDGE_PADDING}px`,
   width: '100%',
+  height: 'fit-content',
   ...rtlTextSx,
 } as const;
 

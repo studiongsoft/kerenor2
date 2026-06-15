@@ -20,6 +20,7 @@ import { rtlTextSx } from '../../theme/rtlLayout';
 import { AllocatedConferencesSection } from '../shared/AllocatedConferencesSection';
 import {
   bankFormDialogSlotProps,
+  FORM_DIALOG_BODY_STACK_SPACING,
   formDialogContentSx,
   formDialogFieldRowSx,
   DIALOG_TITLE_CONTENT_GAP,
@@ -80,7 +81,7 @@ export function BankFormDialog({
         />
 
         <Box sx={formDialogContentSx}>
-          <Stack spacing={2.5}>
+          <Stack spacing={FORM_DIALOG_BODY_STACK_SPACING}>
             <Stack sx={formDialogFieldRowSx}>
               <TextField
                 label="שם הבנק"

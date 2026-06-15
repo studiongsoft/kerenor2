@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   TABLE_ROW_EXIT_MS,
   TABLE_ROW_HIGHLIGHT_MS,
@@ -9,6 +9,47 @@ export interface PresenceItem<T> {
   key: string;
   item: T;
   phase: TableRowPresencePhase;
+}
+
+function sameKeySet(previousKeys: string[], nextKeys: string[]): boolean {
+  if (previousKeys.length !== nextKeys.length) {
+    return false;
+  }
+
+  const previousKeySet = new Set(previousKeys);
+  if (previousKeySet.size !== nextKeys.length) {
+    return false;
+  }
+
+  return nextKeys.every((key) => previousKeySet.has(key));
+}
+
+/** Page swap or sort reset — no shared rows, skip enter/exit animations. */
+function isFullSwap(previousKeys: string[], nextKeys: string[]): boolean {
+  if (previousKeys.length === 0 || nextKeys.length === 0) {
+    return previousKeys.length !== nextKeys.length;
+  }
+
+  const nextKeySet = new Set(nextKeys);
+  return !previousKeys.some((key) => nextKeySet.has(key));
+}
+
+function toPresentList<T>(items: T[], keyFn: (item: T) => string): PresenceItem<T>[] {
+  return items.map((item) => ({
+    key: keyFn(item),
+    item,
+    phase: 'present' as const,
+  }));
+}
+
+function clearPendingTimers(
+  exitTimers: Map<string, ReturnType<typeof setTimeout>>,
+  highlightTimers: Map<string, ReturnType<typeof setTimeout>>,
+): void {
+  exitTimers.forEach(clearTimeout);
+  exitTimers.clear();
+  highlightTimers.forEach(clearTimeout);
+  highlightTimers.clear();
 }
 
 export function usePresenceList<T>(items: T[], getKey: (item: T) => string): PresenceItem<T>[] {
@@ -25,22 +66,47 @@ export function usePresenceList<T>(items: T[], getKey: (item: T) => string): Pre
 
   const exitTimersRef = useRef(new Map<string, ReturnType<typeof setTimeout>>());
   const highlightTimersRef = useRef(new Map<string, ReturnType<typeof setTimeout>>());
+  const shouldPromoteEnteringRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const keyFn = getKeyRef.current;
-    const nextItemMap = new Map(items.map((item) => [keyFn(item), item]));
-    const nextKeys = new Set(nextItemMap.keys());
+    const nextKeys = items.map((item) => keyFn(item));
+    const nextKeySet = new Set(nextKeys);
 
     setPresence((prev) => {
+      const activePrevKeys = prev
+        .filter((entry) => entry.phase !== 'exiting')
+        .map((entry) => entry.key);
+
+      if (sameKeySet(activePrevKeys, nextKeys) || isFullSwap(activePrevKeys, nextKeys)) {
+        shouldPromoteEnteringRef.current = false;
+        clearPendingTimers(exitTimersRef.current, highlightTimersRef.current);
+        return toPresentList(items, keyFn);
+      }
+
+      const prevByKey = new Map(prev.map((entry) => [entry.key, entry]));
       const result: PresenceItem<T>[] = [];
+      let hasNew = false;
+
+      for (const item of items) {
+        const key = keyFn(item);
+        const existing = prevByKey.get(key);
+
+        if (existing) {
+          result.push({
+            key,
+            item,
+            phase: existing.phase === 'exiting' ? 'exiting' : existing.phase,
+          });
+          continue;
+        }
+
+        hasNew = true;
+        result.push({ key, item, phase: 'entering' });
+      }
 
       for (const entry of prev) {
-        if (nextKeys.has(entry.key)) {
-          result.push({
-            key: entry.key,
-            item: nextItemMap.get(entry.key)!,
-            phase: entry.phase === 'exiting' ? 'exiting' : entry.phase,
-          });
+        if (nextKeySet.has(entry.key)) {
           continue;
         }
 
@@ -52,25 +118,30 @@ export function usePresenceList<T>(items: T[], getKey: (item: T) => string): Pre
         result.push(entry);
       }
 
-      for (const item of items) {
-        const key = keyFn(item);
-        if (!prev.some((entry) => entry.key === key)) {
-          result.push({ key, item, phase: 'entering' });
-        }
-      }
-
+      shouldPromoteEnteringRef.current = hasNew;
       return result;
     });
   }, [items]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!shouldPromoteEnteringRef.current) {
+      return;
+    }
+
+    shouldPromoteEnteringRef.current = false;
+
     const frame = requestAnimationFrame(() => {
-      setPresence((prev) =>
-        prev.map((entry) =>
+      setPresence((prev) => {
+        if (!prev.some((entry) => entry.phase === 'entering')) {
+          return prev;
+        }
+
+        return prev.map((entry) =>
           entry.phase === 'entering' ? { ...entry, phase: 'highlighted' } : entry,
-        ),
-      );
+        );
+      });
     });
+
     return () => cancelAnimationFrame(frame);
   }, [items]);
 

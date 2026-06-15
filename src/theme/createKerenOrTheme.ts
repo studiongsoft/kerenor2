@@ -1,5 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import type { Theme, ThemeOptions } from '@mui/material/styles';
+import '@mui/x-date-pickers/themeAugmentation';
+import { datePickerComponents } from './datePickerComponents';
 
 /** Shared table layout tokens — exported for tableStyles */
 export const TABLE_CELL_PX = 2;
@@ -14,7 +16,6 @@ export const TEXT_FIELD_WIDTH = 410;
 export const SEARCH_FIELD_WIDTH = TEXT_FIELD_WIDTH;
 /** Campaign add/edit dialog — Figma frame */
 export const CAMPAIGN_FORM_DIALOG_WIDTH = 900;
-export const CAMPAIGN_FORM_DIALOG_HEIGHT = 645;
 /** Conference add/edit dialog */
 export const CONFERENCE_FORM_DIALOG_WIDTH = 474;
 /** Gap between popup search field and adjacent action button */
@@ -423,21 +424,23 @@ export const kerenOrThemeOptions = {
             color: themePalette(theme).text.primary,
           },
           '&:hover .MuiTableSortLabel-icon': {
-            opacity: '1 !important',
+            color: `${themePalette(theme).text.primary} !important`,
           },
           '&.Mui-active': {
             color: themePalette(theme).text.primary,
           },
           '&.Mui-active .MuiTableSortLabel-icon': {
-            opacity: '1 !important',
             color: `${themePalette(theme).primary.main} !important`,
           },
         }),
         icon: ({ theme }: ThemeCallback) => ({
-          opacity: '0.6 !important',
-          color: `${themePalette(theme).text.primary} !important`,
+          opacity: '1 !important',
+          color: 'rgba(0, 0, 0, 0.5) !important',
           margin: '0 !important',
           flexShrink: 0,
+          ...theme.applyStyles('dark', {
+            color: 'rgba(255, 255, 255, 0.5) !important',
+          }),
         }),
       },
     },
@@ -510,6 +513,7 @@ export const kerenOrThemeOptions = {
     MuiTableBody: {
       styleOverrides: {
         root: {
+          overflow: 'hidden',
           '& .MuiTableRow-root': {
             height: `${TABLE_ROW_HEIGHT}px`,
             minHeight: `${TABLE_ROW_HEIGHT}px`,
@@ -558,6 +562,7 @@ export const kerenOrThemeOptions = {
       styleOverrides: {
         root: ({ theme }: ThemeCallback) => ({
           borderRadius: 12,
+          overflow: 'hidden',
           border: `1px solid ${themePalette(theme).divider}`,
           backgroundColor: themePalette(theme).background.paper,
           boxShadow: SURFACE_SHADOW,
@@ -712,9 +717,6 @@ export const kerenOrThemeOptions = {
           color: themePalette(theme).primary.main,
           fontWeight: 400,
           textDecoration: 'none',
-          '&:hover': {
-            textDecoration: 'underline',
-          },
           ...theme.applyStyles('dark', {
             color: themePalette(theme).primary.main,
           }),
@@ -861,6 +863,7 @@ export const kerenOrThemeOptions = {
         },
       },
     },
+    ...datePickerComponents,
   },
   colorSchemes: {
     light: {

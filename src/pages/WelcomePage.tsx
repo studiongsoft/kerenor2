@@ -71,6 +71,7 @@ export default function WelcomePage() {
           justifyContent: 'center',
           gap: 3,
           height: 'fit-content',
+          py: 3,
         }}
       >
         {WELCOME_CARDS.map(({ title, to, illustration }, index) => (

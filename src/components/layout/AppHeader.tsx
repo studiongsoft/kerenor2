@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router-dom';
 import { microAppearSx } from '../../theme/microAnimations';
@@ -59,21 +60,38 @@ export function AppHeader() {
           }}
         >
           <UserAvatar />
-          <IconButton
-            aria-label="יציאה"
-            size="small"
-            sx={{
-              ...microAppearSx({ variant: 'fadeIn', delayMs: 140 }),
-              color: 'text.secondary',
-              p: 0.75,
-              '&:hover': {
-                color: 'text.primary',
-                bgcolor: 'action.hover',
+          <Tooltip
+            title="התנתקות"
+            placement="top"
+            enterDelay={300}
+            slotProps={{
+              popper: { dir: 'rtl' },
+              tooltip: {
+                sx: {
+                  fontSize: 12,
+                  lineHeight: 1.4,
+                  py: 0.5,
+                  px: 1,
+                },
               },
             }}
           >
-            <LogoutOutlinedIcon fontSize="small" />
-          </IconButton>
+            <IconButton
+              aria-label="יציאה"
+              size="small"
+              sx={{
+                ...microAppearSx({ variant: 'fadeIn', delayMs: 140 }),
+                color: 'text.secondary',
+                p: 0.75,
+                '&:hover': {
+                  color: 'text.primary',
+                  bgcolor: 'action.hover',
+                },
+              }}
+            >
+              <LogoutOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Stack>
       </Toolbar>
     </AppBar>

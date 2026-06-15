@@ -49,10 +49,8 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
           }),
           '&:hover': {
             boxShadow: POPUP_SHADOW,
-            transform: 'translateY(-2px)',
-            '@media (hover: none)': {
-              boxShadow: SURFACE_SHADOW,
-              transform: 'none',
+            '@media (hover: hover)': {
+              transform: 'translateY(-2px)',
             },
           },
           '&:active': {
@@ -87,6 +85,7 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
         }}
       >
         <Box
+          className="welcome-card-cta"
           sx={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -96,7 +95,19 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
             fontWeight: 500,
           }}
         >
-          <ChevronLeftIcon sx={{ fontSize: 18 }} />
+          <ChevronLeftIcon
+            className="welcome-card-cta-arrow"
+            sx={{
+              fontSize: 18,
+              transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+              '.welcome-card-cta:hover &': {
+                transform: 'translateX(3px)',
+              },
+              '@media (prefers-reduced-motion: reduce)': {
+                transition: 'none',
+              },
+            }}
+          />
           כניסה
         </Box>
       </Box>

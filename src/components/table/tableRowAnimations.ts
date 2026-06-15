@@ -9,14 +9,14 @@ export const TABLE_ROW_EXIT_MS = 220;
 export const TABLE_ROW_HIGHLIGHT_MS = 1000;
 export const TABLE_ROW_HIGHLIGHT_FADE_MS = 350;
 
-const tableRowMotionTransition = `opacity ${TABLE_ROW_EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1), transform ${TABLE_ROW_EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+const tableRowOpacityTransition = `opacity ${TABLE_ROW_EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`;
 const tableRowBackgroundTransition = `background-color ${TABLE_ROW_HIGHLIGHT_FADE_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`;
 
 const tableRowReducedMotionSx = {
   '@media (prefers-reduced-motion: reduce)': {
     transition: 'none',
     opacity: 1,
-    transform: 'none',
+    visibility: 'visible',
     backgroundColor: 'transparent',
   },
 } as const;
@@ -36,9 +36,9 @@ export function tableRowPhaseSx(phase: TableRowPresencePhase): SxProps<Theme> {
   if (phase === 'present') {
     return {
       opacity: 1,
-      transform: 'translateY(0)',
+      visibility: 'visible',
       backgroundColor: 'transparent',
-      transition: `${tableRowMotionTransition}, ${tableRowBackgroundTransition}`,
+      transition: `${tableRowOpacityTransition}, ${tableRowBackgroundTransition}`,
       ...tableRowReducedMotionSx,
     };
   }
@@ -46,8 +46,8 @@ export function tableRowPhaseSx(phase: TableRowPresencePhase): SxProps<Theme> {
   if (phase === 'highlighted') {
     return (theme) => ({
       opacity: 1,
-      transform: 'translateY(0)',
-      transition: `${tableRowMotionTransition}, ${tableRowBackgroundTransition}`,
+      visibility: 'visible',
+      transition: `${tableRowOpacityTransition}, ${tableRowBackgroundTransition}`,
       ...tableRowHighlightSx(theme),
       ...tableRowReducedMotionSx,
     });
@@ -56,16 +56,16 @@ export function tableRowPhaseSx(phase: TableRowPresencePhase): SxProps<Theme> {
   if (phase === 'exiting') {
     return {
       opacity: 0,
-      transform: 'translateY(-6px)',
-      transition: tableRowMotionTransition,
+      visibility: 'hidden',
+      pointerEvents: 'none',
+      transition: tableRowOpacityTransition,
       ...tableRowReducedMotionSx,
     };
   }
 
   return {
     opacity: 0,
-    transform: 'translateY(-6px)',
-    transition: tableRowMotionTransition,
+    transition: tableRowOpacityTransition,
     ...tableRowReducedMotionSx,
   };
 }

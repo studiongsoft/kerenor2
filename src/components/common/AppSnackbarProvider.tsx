@@ -1,20 +1,14 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  type ReactNode,
-  type SyntheticEvent,
-} from 'react';
+import { useCallback, useState, type ReactNode, type SyntheticEvent } from 'react';
 import Slide from '@mui/material/Slide';
 import type { SlideProps } from '@mui/material/Slide';
 import Snackbar from '@mui/material/Snackbar';
 import { TOAST_TOP_OFFSET } from '../../config/navigation';
 import { AppToast } from './AppToast';
-import {
-  formatItemToastMessage,
-  type ItemToastPayload,
-} from './toastMessages';
+import { SnackbarContext } from './snackbarContext';
+import { formatItemToastMessage, type ItemToastPayload } from './toastMessages';
+
+export { useSnackbar } from './snackbarContext';
+export type { SnackbarContextValue } from './snackbarContext';
 
 /** Default 4s + 25% */
 const TOAST_AUTO_HIDE_MS = 5000;
@@ -22,12 +16,6 @@ const TOAST_AUTO_HIDE_MS = 5000;
 interface SnackbarMessage extends ItemToastPayload {
   text: string;
 }
-
-interface SnackbarContextValue {
-  showItemToast: (payload: ItemToastPayload) => void;
-}
-
-const SnackbarContext = createContext<SnackbarContextValue | null>(null);
 
 function SlideDown(props: SlideProps) {
   return <Slide {...props} direction="down" />;
@@ -85,12 +73,4 @@ export function AppSnackbarProvider({ children }: { children: ReactNode }) {
       </Snackbar>
     </SnackbarContext.Provider>
   );
-}
-
-export function useSnackbar(): SnackbarContextValue {
-  const context = useContext(SnackbarContext);
-  if (!context) {
-    throw new Error('useSnackbar must be used within AppSnackbarProvider');
-  }
-  return context;
 }

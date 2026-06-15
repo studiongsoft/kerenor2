@@ -30,6 +30,7 @@ import {
   popupTableEmptyCellSx,
   tableBodyCellSx,
   tableCellContentSx,
+  tableCellInnerCenterSx,
   tableHeadCellSx,
 } from '../table/tableStyles';
 
@@ -205,14 +206,16 @@ export function AllocatedConferencesSection({
                     </Typography>
                   </TableCell>
                   <TableCell align="center" sx={tableBodyCellSx}>
-                    <IconButton
-                      aria-label="הסרת ועידה"
-                      size="small"
-                      color="inherit"
-                      onClick={() => remove(index)}
-                    >
-                      <DeleteOutlineIcon fontSize="small" />
-                    </IconButton>
+                    <Box sx={tableCellInnerCenterSx}>
+                      <IconButton
+                        aria-label="הסרת ועידה"
+                        size="small"
+                        color="inherit"
+                        onClick={() => remove(index)}
+                      >
+                        <DeleteOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))

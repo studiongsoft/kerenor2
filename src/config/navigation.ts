@@ -16,11 +16,14 @@ export const TOAST_TOP_GAP = 24;
 /** Viewport offset for fixed top toast (below header + gap) */
 export const TOAST_TOP_OFFSET = APP_HEADER_HEIGHT + TOAST_TOP_GAP;
 
-/** Gap between header bottom and page title / first sidebar item */
+/** Gap between header bottom and page title / first sidebar item (PageHeader internals) */
 export const HEADER_CONTENT_GAP = 56;
 
+/** Gap between AppBar bottom and main content / first sidebar item */
+export const MAIN_CONTENT_TOP_GAP = 116;
+
 /** Offset from viewport top to main content / first nav item */
-export const NAV_TOP_OFFSET = APP_HEADER_HEIGHT + HEADER_CONTENT_GAP;
+export const NAV_TOP_OFFSET = APP_HEADER_HEIGHT + MAIN_CONTENT_TOP_GAP;
 
 export interface NavIcons {
   light: string;

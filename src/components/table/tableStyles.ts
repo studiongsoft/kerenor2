@@ -6,6 +6,7 @@ import {
   TABLE_HEAD_HEIGHT,
   TABLE_ROW_HEIGHT,
 } from '../../theme/createKerenOrTheme';
+import { linkHoUnderlineLtrSx, linkHoUnderlineSx } from '../../theme/linkHoUnderline';
 
 export {
   TABLE_ACTIONS_COLUMN_WIDTH,
@@ -94,6 +95,38 @@ export const tablePrimaryCellLtrContentSx = {
   ...tableCellLtrContentSx,
   color: 'primary.main',
 } as const;
+
+/** Primary identifier column — name/number aligned to cell start (opposite of default body cells) */
+export const tablePrimaryCellInnerSx = {
+  ...tableCellInnerSx,
+  justifyContent: 'flex-start /* @noflip */',
+} as const;
+
+/** Primary name/number links — text-width only (no block stretch) + animated underline */
+const tablePrimaryCellLinkBaseSx = {
+  color: 'primary.main',
+  maxWidth: '100%',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap' as const,
+  cursor: 'pointer',
+  border: 'none',
+  background: 'none',
+  padding: 0,
+  font: 'inherit',
+} as const;
+
+export const tablePrimaryCellLinkSx = [tablePrimaryCellLinkBaseSx, linkHoUnderlineSx] as const;
+
+export const tablePrimaryCellLtrLinkSx = [
+  {
+    ...tablePrimaryCellLinkBaseSx,
+    direction: 'ltr /* @noflip */',
+    unicodeBidi: 'plaintext' as const,
+    textAlign: 'left /* @noflip */',
+  },
+  linkHoUnderlineLtrSx,
+] as const;
 
 export const tableActionsCellSx = {
   ...tableBodyCellSx,

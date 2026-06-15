@@ -19,6 +19,7 @@ import { fromCampaignRow, toCampaignRow } from '../../utils/campaignFormLogic';
 import { rtlTextSx } from '../../theme/rtlLayout';
 import { AllocatedConferencesSection } from '../shared/AllocatedConferencesSection';
 import {
+  FORM_DIALOG_BODY_STACK_SPACING,
   formDialogContentSx,
   formDialogFieldRowSx,
   formDialogSlotProps,
@@ -88,7 +89,7 @@ export function CampaignFormDialog({
         />
 
         <Box sx={formDialogContentSx}>
-          <Stack spacing={2.5}>
+          <Stack spacing={FORM_DIALOG_BODY_STACK_SPACING}>
             <Stack sx={formDialogFieldRowSx}>
               <TextField
                 label="שם המבצע"

@@ -12,7 +12,8 @@ import {
   tableBodyCellSx,
   tableCellInnerSx,
   tableCellLtrContentSx,
-  tablePrimaryCellContentSx,
+  tablePrimaryCellInnerSx,
+  tablePrimaryCellLinkSx,
   tableConferenceCountCellSx,
   tableConferenceCountChipSx,
   tableConferenceCountInnerSx,
@@ -56,19 +57,14 @@ export function CampaignTableRow({
   return (
     <TableRow sx={[tableRowPhaseSx(phase), ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]} {...tableRowProps}>
       <TableCell align="right" sx={tableBodyCellSx}>
-        <Box sx={tableCellInnerSx}>
+        <Box sx={tablePrimaryCellInnerSx}>
           <Link
             component="button"
             type="button"
             variant="body2"
             underline="none"
             onClick={() => onEdit(row)}
-            sx={{
-              ...tablePrimaryCellContentSx,
-              fontWeight: 400,
-              cursor: 'pointer',
-              '&:hover': { textDecoration: 'underline' },
-            }}
+            sx={tablePrimaryCellLinkSx}
           >
             {row.name}
           </Link>

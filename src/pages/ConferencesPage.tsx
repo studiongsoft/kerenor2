@@ -15,7 +15,7 @@ import { DeleteConfirmDialog, useDeleteConfirm } from '../components/shared/Dele
 import { DataTable } from '../components/table/DataTable';
 import { PageHeader } from '../components/table/PageHeader';
 import { TableIconActions } from '../components/table/TableIconActions';
-import { tableBodyCellSx, tableCellContentSx, tableCellInnerSx, tableCellLtrContentSx, tablePrimaryCellLtrContentSx } from '../components/table/tableStyles';
+import { tableBodyCellSx, tableCellContentSx, tableCellInnerSx, tableCellLtrContentSx, tablePrimaryCellInnerSx, tablePrimaryCellLtrLinkSx } from '../components/table/tableStyles';
 import { tableRowPhaseSx } from '../components/table/tableRowAnimations';
 import { useSnackbar } from '../components/common/AppSnackbarProvider';
 import { useConferenceStore } from '../stores/rootStore';
@@ -126,19 +126,14 @@ function ConferencesPageBase() {
         renderRow={(row, phase) => (
           <TableRow sx={tableRowPhaseSx(phase)}>
             <TableCell align="right" sx={tableBodyCellSx}>
-              <Box sx={tableCellInnerSx}>
+              <Box sx={tablePrimaryCellInnerSx}>
                 <Link
                   component="button"
                   type="button"
                   variant="body2"
                   underline="none"
                   onClick={() => handleEdit(row)}
-                  sx={{
-                    ...tablePrimaryCellLtrContentSx,
-                    fontWeight: 400,
-                    cursor: 'pointer',
-                    '&:hover': { textDecoration: 'underline' },
-                  }}
+                  sx={tablePrimaryCellLtrLinkSx}
                 >
                   {row.number}
                 </Link>

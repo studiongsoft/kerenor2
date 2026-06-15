@@ -9,6 +9,12 @@
 
 ## שינויים
 
+### 2026-06-11 — CTA חץ ב-hover
+
+- **קבצים:** `WelcomeCard.tsx`
+- **מה:** חץ «כניסה» זז `translateX(3px)` רק ב-hover על `.welcome-card-cta` (לא על כל הכרטיס)
+- **למה:** משוב hover ממוקד ל-CTA לפי Figma
+
 ### 2026-06-10 — אפקט לחיצה כמו כפתור
 
 - **קבצים:** `WelcomeCard.tsx`

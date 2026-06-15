@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { ThemeProvider } from '@mui/material/styles';
+import { DatePickersProvider } from '../components/common/DatePickersProvider';
 import { rtlCache } from '@studiongsoft/design-lead';
 import { createKerenOrTheme } from './createKerenOrTheme';
 import { microAnimationGlobalStyles } from './microAnimations';
@@ -27,11 +28,13 @@ export function KerenOrThemeProvider({ children }: { children: ReactNode }) {
           defaultMode="light"
           modeStorageKey={KEREN_OR_MODE_STORAGE_KEY}
         >
-          <div dir="rtl" lang="he">
-            <CssBaseline />
-            <GlobalStyles styles={microAnimationGlobalStyles} />
-            {children}
-          </div>
+          <DatePickersProvider>
+            <div dir="rtl" lang="he">
+              <CssBaseline />
+              <GlobalStyles styles={microAnimationGlobalStyles} />
+              {children}
+            </div>
+          </DatePickersProvider>
         </ThemeProvider>
       </CacheProvider>
     </>

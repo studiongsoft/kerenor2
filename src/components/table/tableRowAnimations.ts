@@ -4,6 +4,7 @@ import { TABLE_ROW_HOVER } from '../../theme/createKerenOrTheme';
 export type TableRowPresencePhase = 'entering' | 'highlighted' | 'present' | 'exiting';
 
 export const TABLE_ROW_ENTER_MS = 260;
+export const TABLE_ROW_SORT_MS = 260;
 export const TABLE_ROW_EXIT_MS = 220;
 /** How long a newly added row keeps hover styling before fading to default */
 export const TABLE_ROW_HIGHLIGHT_MS = 1000;
@@ -58,13 +59,28 @@ export function tableRowPhaseSx(phase: TableRowPresencePhase): SxProps<Theme> {
       opacity: 0,
       visibility: 'hidden',
       pointerEvents: 'none',
+      height: 0,
+      minHeight: 0,
+      maxHeight: 0,
+      lineHeight: 0,
+      overflow: 'hidden',
+      border: 'none',
       transition: tableRowOpacityTransition,
+      '& .MuiTableCell-root': {
+        height: 0,
+        minHeight: 0,
+        maxHeight: 0,
+        py: 0,
+        borderBottom: 'none',
+        overflow: 'hidden',
+      },
       ...tableRowReducedMotionSx,
     };
   }
 
   return {
     opacity: 0,
+    visibility: 'hidden',
     transition: tableRowOpacityTransition,
     ...tableRowReducedMotionSx,
   };

@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { BankFormDialog } from '../components/banks/BankFormDialog';
-import { DeleteConfirmDialog, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
+import { DeleteConfirmDialog, deleteWarningMessages, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
 import { DataTable } from '../components/table/DataTable';
 import { PageHeader } from '../components/table/PageHeader';
 import { TableIconActions } from '../components/table/TableIconActions';
@@ -135,8 +135,8 @@ function BanksPageBase() {
         }
         rows={store.paginatedRows}
         getRowKey={(row) => row.id}
-        renderRow={(row, phase) => (
-          <TableRow sx={tableRowPhaseSx(phase)}>
+        renderRow={(row, phase, rowKey) => (
+          <TableRow data-row-key={rowKey} sx={tableRowPhaseSx(phase)}>
             <TableCell align="right" sx={tableBodyCellSx}>
               <Box sx={tablePrimaryCellInnerSx}>
                 <Link
@@ -199,6 +199,7 @@ function BanksPageBase() {
       <DeleteConfirmDialog
         open={Boolean(pending)}
         name={pending?.name ?? ''}
+        warningMessage={deleteWarningMessages.bank}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />

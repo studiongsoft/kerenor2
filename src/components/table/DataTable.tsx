@@ -1,4 +1,4 @@
-import { Fragment, type MouseEvent, type ReactNode } from 'react';
+import { Fragment, type MouseEvent, type ReactNode, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,8 +17,10 @@ import { ErrorState } from '../common/ErrorState';
 import { LoadingState } from '../common/LoadingState';
 import type { TableRowPresencePhase } from './tableRowAnimations';
 import { usePresenceList } from './usePresenceList';
+import { useTableRowReorder } from './useTableRowReorder';
 import {
   TABLE_ACTIONS_COLUMN_WIDTH,
+  TABLE_ROW_HEIGHT,
   tableCellInnerSx,
   tableHeadCellSx,
   tableMessageRowSx,
@@ -46,7 +48,7 @@ interface DataTableProps<C extends string, T> {
   actionsColumnWidth?: number;
   rows: T[];
   getRowKey: (row: T) => string;
-  renderRow: (row: T, phase: TableRowPresencePhase) => ReactNode;
+  renderRow: (row: T, phase: TableRowPresencePhase, rowKey: string) => ReactNode;
 }
 
 export function DataTable<C extends string, T>({
@@ -73,7 +75,17 @@ export function DataTable<C extends string, T>({
 }: DataTableProps<C, T>) {
   const columnCount = columns.length + 1;
   const dataColumnWidth = `calc((100% - ${actionsColumnWidth}px) / ${columns.length})`;
+  const tbodyRef = useRef<HTMLTableSectionElement>(null);
   const presence = usePresenceList(rows, getRowKey);
+  const orderedRowKeys = presence
+    .filter((entry) => entry.phase !== 'exiting')
+    .map((entry) => entry.key);
+  useTableRowReorder(tbodyRef, orderedRowKeys);
+  const pageRowCount =
+    !isLoading && !error && !isEmpty
+      ? Math.min(TABLE_ROWS_PER_PAGE, Math.max(0, totalRows - page * TABLE_ROWS_PER_PAGE))
+      : 0;
+  const tableBodyHeight = pageRowCount * TABLE_ROW_HEIGHT;
 
   const renderBody = () => {
     if (isLoading) {
@@ -113,7 +125,7 @@ export function DataTable<C extends string, T>({
     }
 
     return presence.map(({ key, item, phase }) => (
-      <Fragment key={key}>{renderRow(item, phase)}</Fragment>
+      <Fragment key={key}>{renderRow(item, phase, key)}</Fragment>
     ));
   };
 
@@ -154,7 +166,21 @@ export function DataTable<C extends string, T>({
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>{renderBody()}</TableBody>
+        <TableBody
+          ref={tbodyRef}
+          sx={
+            pageRowCount > 0
+              ? {
+                  height: tableBodyHeight,
+                  minHeight: tableBodyHeight,
+                  maxHeight: tableBodyHeight,
+                  overflow: 'hidden',
+                }
+              : undefined
+          }
+        >
+          {renderBody()}
+        </TableBody>
         {!isLoading && !error && !isEmpty ? (
           <TableFooter>
             <TableRow>

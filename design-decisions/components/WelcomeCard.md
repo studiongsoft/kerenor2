@@ -9,6 +9,12 @@
 
 ## שינויים
 
+### 2026-06-15 — צבע CTA לפי מצב כרטיס
+
+- **קבצים:** `WelcomeCard.tsx`
+- **מה:** ברירת מחדל — `text.secondary` (אפור) ב-light, `text.primary` (לבן) ב-dark; ב-hover על הכרטיס — `primary.main`; חץ זז רק ב-hover על אזור ה-CTA (כולל padding, לא רק הטקסט)
+- **למה:** הפרדה בין מצב רגיל למצב hover; אזור לחיצה/הובר רחב יותר ל-«כניסה»
+
 ### 2026-06-11 — CTA חץ ב-hover
 
 - **קבצים:** `WelcomeCard.tsx`

@@ -75,7 +75,7 @@ export function toCampaignRow(values: CampaignFormValues, existing?: CampaignRow
   const base: CampaignRowData = {
     id: existing?.id ?? `campaign-${Date.now()}`,
     name: values.name.trim(),
-    startTime: values.startTime.trim() || '00:00',
+    startTime: values.startTime.trim(),
     startDate: values.startDate.trim(),
     endTime: values.endTime.trim(),
     endDate: values.endDate.trim(),

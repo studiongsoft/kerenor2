@@ -24,7 +24,11 @@ function sameKeySet(previousKeys: string[], nextKeys: string[]): boolean {
   return nextKeys.every((key) => previousKeySet.has(key));
 }
 
-/** Page swap or sort reset — no shared rows, skip enter/exit animations. */
+function orderChanged(previousKeys: string[], nextKeys: string[]): boolean {
+  return previousKeys.some((key, index) => key !== nextKeys[index]);
+}
+
+/** Page swap with no shared rows — skip enter/exit animations. */
 function isFullSwap(previousKeys: string[], nextKeys: string[]): boolean {
   if (previousKeys.length === 0 || nextKeys.length === 0) {
     return previousKeys.length !== nextKeys.length;
@@ -32,6 +36,23 @@ function isFullSwap(previousKeys: string[], nextKeys: string[]): boolean {
 
   const nextKeySet = new Set(nextKeys);
   return !previousKeys.some((key) => nextKeySet.has(key));
+}
+
+/** Sort/filter/page overlap — both additions and removals; instant swap avoids blank rows. */
+function isMixedChange(previousKeys: string[], nextKeys: string[]): boolean {
+  const previousKeySet = new Set(previousKeys);
+  const nextKeySet = new Set(nextKeys);
+  const hasAdditions = nextKeys.some((key) => !previousKeySet.has(key));
+  const hasRemovals = previousKeys.some((key) => !nextKeySet.has(key));
+  return hasAdditions && hasRemovals;
+}
+
+function shouldInstantSwap(previousKeys: string[], nextKeys: string[]): boolean {
+  return (
+    sameKeySet(previousKeys, nextKeys) ||
+    isFullSwap(previousKeys, nextKeys) ||
+    isMixedChange(previousKeys, nextKeys)
+  );
 }
 
 function toPresentList<T>(items: T[], keyFn: (item: T) => string): PresenceItem<T>[] {
@@ -57,11 +78,7 @@ export function usePresenceList<T>(items: T[], getKey: (item: T) => string): Pre
   getKeyRef.current = getKey;
 
   const [presence, setPresence] = useState<PresenceItem<T>[]>(() =>
-    items.map((item) => ({
-      key: getKeyRef.current(item),
-      item,
-      phase: 'present' as const,
-    })),
+    toPresentList(items, getKeyRef.current),
   );
 
   const exitTimersRef = useRef(new Map<string, ReturnType<typeof setTimeout>>());
@@ -78,10 +95,21 @@ export function usePresenceList<T>(items: T[], getKey: (item: T) => string): Pre
         .filter((entry) => entry.phase !== 'exiting')
         .map((entry) => entry.key);
 
-      if (sameKeySet(activePrevKeys, nextKeys) || isFullSwap(activePrevKeys, nextKeys)) {
+      if (shouldInstantSwap(activePrevKeys, nextKeys)) {
         shouldPromoteEnteringRef.current = false;
         clearPendingTimers(exitTimersRef.current, highlightTimersRef.current);
-        return toPresentList(items, keyFn);
+        const next = toPresentList(items, keyFn);
+
+        if (
+          sameKeySet(activePrevKeys, nextKeys) &&
+          !orderChanged(activePrevKeys, nextKeys) &&
+          prev.length === next.length &&
+          prev.every((entry, index) => entry.key === next[index]?.key && entry.phase === 'present')
+        ) {
+          return prev;
+        }
+
+        return next;
       }
 
       const prevByKey = new Map(prev.map((entry) => [entry.key, entry]));

@@ -5,7 +5,7 @@ import { datePickerComponents } from './datePickerComponents';
 
 /** Shared table layout tokens — exported for tableStyles */
 export const TABLE_CELL_PX = 2;
-export const TABLE_ROW_HEIGHT = 48;
+export const TABLE_ROW_HEIGHT = 56;
 /** Fixed height for buttons, inputs, search fields, and table headers */
 export const CONTROL_HEIGHT = 40;
 /** Minimum width for action buttons */

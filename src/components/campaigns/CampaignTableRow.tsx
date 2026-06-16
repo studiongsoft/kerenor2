@@ -55,7 +55,7 @@ export function CampaignTableRow({
   ...tableRowProps
 }: CampaignTableRowProps) {
   return (
-    <TableRow sx={[tableRowPhaseSx(phase), ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]} {...tableRowProps}>
+    <TableRow data-row-key={row.id} sx={[tableRowPhaseSx(phase), ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]} {...tableRowProps}>
       <TableCell align="right" sx={tableBodyCellSx}>
         <Box sx={tablePrimaryCellInnerSx}>
           <Link

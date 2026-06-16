@@ -14,16 +14,19 @@ import { rtlTextSx } from '../theme/rtlLayout';
 const WELCOME_CARDS = [
   {
     title: 'מבצעים',
+    description: 'ניהול משאבי הבסיס, יבוא מבק"ק וניהול ידני.',
     to: '/campaigns',
     illustration: <WelcomeCampaignsIllustration />,
   },
   {
     title: 'בנקים',
+    description: 'קבוצות קבועות של עורקים לשימוש עתידי.',
     to: '/banks',
     illustration: <WelcomeBanksIllustration />,
   },
   {
     title: 'ועידות',
+    description: 'קבוצות של ועידות המשויכות לבנקי משאבים',
     to: '/conferences',
     illustration: <WelcomeConferencesIllustration />,
   },
@@ -43,7 +46,7 @@ export default function WelcomePage() {
             mb: 2,
           }}
         >
-          ברוכים הבאים למערכת עידון
+          ברוכים הבאים למערכת ועידון
         </Typography>
       </MicroAppear>
 
@@ -74,13 +77,19 @@ export default function WelcomePage() {
           py: 3,
         }}
       >
-        {WELCOME_CARDS.map(({ title, to, illustration }, index) => (
+        {WELCOME_CARDS.map(({ title, description, to, illustration }, index) => (
           <MicroAppear
             key={to}
             variant="scaleIn"
             delayMs={120 + microAppearStagger(index, 70)}
+            sx={{ height: '100%' }}
           >
-            <WelcomeCard title={title} to={to} illustration={illustration} />
+            <WelcomeCard
+              title={title}
+              description={description}
+              to={to}
+              illustration={illustration}
+            />
           </MicroAppear>
         ))}
       </Stack>

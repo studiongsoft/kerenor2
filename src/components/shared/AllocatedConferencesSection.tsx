@@ -5,6 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,7 +23,7 @@ import {
   conferenceRowToAllocation,
   filterAvailableConferences,
 } from '../../utils/conferenceAllocationLogic';
-import { TEXT_FIELD_WIDTH } from '../../theme/createKerenOrTheme';
+import { TEXT_FIELD_WIDTH, POPUP_SEARCH_ACTION_GAP } from '../../theme/createKerenOrTheme';
 import { rtlTextSx } from '../../theme/rtlLayout';
 import { popupSearchActionRowSx } from './dialogLayout';
 import {
@@ -107,13 +108,28 @@ export function AllocatedConferencesSection({
               placeholder="חפש לפי מספר או ייעוד..."
               slotProps={{
                 ...params.slotProps,
-                input: {
-                  ...params.slotProps.input,
+                htmlInput: {
+                  ...params.slotProps?.htmlInput,
+                  dir: 'rtl',
                   sx: rtlTextSx,
+                },
+                input: {
+                  ...params.slotProps?.input,
+                  sx: {
+                    direction: 'ltr /* @noflip */',
+                  },
                   startAdornment: (
                     <>
-                      <SearchIcon fontSize="small" color="action" sx={{ ml: 0.5 }} />
-                      {params.slotProps.input.startAdornment}
+                      <InputAdornment
+                        position="start"
+                        sx={{
+                          ml: `${POPUP_SEARCH_ACTION_GAP}px`,
+                          mr: `${POPUP_SEARCH_ACTION_GAP}px`,
+                        }}
+                      >
+                        <SearchIcon fontSize="small" color="action" />
+                      </InputAdornment>
+                      {params.slotProps?.input?.startAdornment}
                     </>
                   ),
                 },

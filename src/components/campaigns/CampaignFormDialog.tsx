@@ -121,6 +121,7 @@ export function CampaignFormDialog({
                   required
                   date={startDate}
                   time={startTime}
+                  skipTimeLabel="כל היום"
                   onDateChange={(value) => setValue('startDate', value, { shouldValidate: true })}
                   onTimeChange={(value) => setValue('startTime', value, { shouldValidate: true })}
                   error={Boolean(errors.startDate || errors.startTime)}
@@ -132,6 +133,7 @@ export function CampaignFormDialog({
                   label="מועד סיום"
                   date={endDate}
                   time={endTime}
+                  skipTimeLabel="לא משנה"
                   onDateChange={(value) => setValue('endDate', value, { shouldValidate: true })}
                   onTimeChange={(value) => setValue('endTime', value, { shouldValidate: true })}
                 />

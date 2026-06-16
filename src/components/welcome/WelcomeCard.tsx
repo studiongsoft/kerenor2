@@ -7,16 +7,14 @@ import { Link as RouterLink } from 'react-router-dom';
 import { DARK_CARD_SURFACE, POPUP_SHADOW, SURFACE_SHADOW } from '../../theme/createKerenOrTheme';
 import { rtlTextSx } from '../../theme/rtlLayout';
 
-const CARD_DESCRIPTION =
-  'ניהול משאבי הבסיס, יבוא מבק"ק וניהול ידני.';
-
 interface WelcomeCardProps {
   title: string;
+  description: string;
   to: string;
   illustration: ReactNode;
 }
 
-export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
+export function WelcomeCard({ title, description, to, illustration }: WelcomeCardProps) {
   return (
     <ButtonBase
       component={RouterLink}
@@ -26,7 +24,8 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
         (theme) => ({
           fontSize: '8px',
           width: 280,
-          height: 'fit-content',
+          minHeight: 300,
+          height: 323,
           pt: 0,
           px: 3,
           pb: 3,
@@ -52,6 +51,9 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
             '@media (hover: hover)': {
               transform: 'translateY(-2px)',
             },
+            '& .welcome-card-cta': {
+              color: 'primary.main',
+            },
           },
           '&:active': {
             boxShadow: SURFACE_SHADOW,
@@ -72,8 +74,8 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
         {title}
       </Typography>
 
-      <Typography variant="body2" color="text.secondary" sx={[rtlTextSx, { mb: 3, lineHeight: 1.6 }]}>
-        {CARD_DESCRIPTION}
+      <Typography variant="body2" color="text.secondary" sx={[rtlTextSx, { height: '100%', mb: 3, lineHeight: 1.6 }]}>
+        {description}
       </Typography>
 
       <Box
@@ -86,23 +88,34 @@ export function WelcomeCard({ title, to, illustration }: WelcomeCardProps) {
       >
         <Box
           className="welcome-card-cta"
-          sx={{
+          sx={(theme) => ({
             display: 'inline-flex',
             alignItems: 'center',
             gap: 0.25,
-            color: 'primary.main',
+            alignSelf: 'flex-start /* @noflip */',
+            py: 0.5,
+            pr: 0.5,
+            color: 'text.secondary',
             fontSize: 14,
             fontWeight: 500,
-          }}
+            transition: theme.transitions.create('color', {
+              duration: theme.transitions.duration.short,
+            }),
+            ...theme.applyStyles('dark', {
+              color: 'text.primary',
+            }),
+            '&:hover .welcome-card-cta-arrow': {
+              '@media (hover: hover)': {
+                transform: 'translateX(3px)',
+              },
+            },
+          })}
         >
           <ChevronLeftIcon
             className="welcome-card-cta-arrow"
             sx={{
               fontSize: 18,
               transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-              '.welcome-card-cta:hover &': {
-                transform: 'translateX(3px)',
-              },
               '@media (prefers-reduced-motion: reduce)': {
                 transition: 'none',
               },

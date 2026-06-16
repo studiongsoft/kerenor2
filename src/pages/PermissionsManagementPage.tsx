@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { CampaignFormDialog } from '../components/campaigns/CampaignFormDialog';
 import { CampaignTableRow } from '../components/campaigns/CampaignTableRow';
-import { DeleteConfirmDialog, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
+import { DeleteConfirmDialog, deleteWarningMessages, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
 import { DataTable } from '../components/table/DataTable';
 import { PageHeader } from '../components/table/PageHeader';
 import { useSnackbar } from '../components/common/AppSnackbarProvider';
@@ -145,6 +145,7 @@ function PermissionsManagementPageBase() {
       <DeleteConfirmDialog
         open={Boolean(pending)}
         name={pending?.name ?? ''}
+        warningMessage={deleteWarningMessages.campaign}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />

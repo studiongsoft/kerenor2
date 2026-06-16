@@ -14,7 +14,7 @@ export const campaignFormSchema = z.object({
   name: z.string().trim().min(1, 'שם המבצע חובה'),
   description: z.string(),
   startDate: z.string().trim().min(1, 'מועד התחלה חובה'),
-  startTime: z.string().trim().min(1, 'שעת התחלה חובה'),
+  startTime: z.string(),
   endDate: z.string(),
   endTime: z.string(),
   conferences: conferencesFieldSchema,

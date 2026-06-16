@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { ConferenceFormDialog } from '../components/conferences/ConferenceFormDialog';
-import { DeleteConfirmDialog, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
+import { DeleteConfirmDialog, deleteWarningMessages, useDeleteConfirm } from '../components/shared/DeleteConfirmDialog';
 import { DataTable } from '../components/table/DataTable';
 import { PageHeader } from '../components/table/PageHeader';
 import { TableIconActions } from '../components/table/TableIconActions';
@@ -123,8 +123,8 @@ function ConferencesPageBase() {
         }
         rows={store.paginatedRows}
         getRowKey={(row) => row.id}
-        renderRow={(row, phase) => (
-          <TableRow sx={tableRowPhaseSx(phase)}>
+        renderRow={(row, phase, rowKey) => (
+          <TableRow data-row-key={rowKey} sx={tableRowPhaseSx(phase)}>
             <TableCell align="right" sx={tableBodyCellSx}>
               <Box sx={tablePrimaryCellInnerSx}>
                 <Link
@@ -183,6 +183,7 @@ function ConferencesPageBase() {
       <DeleteConfirmDialog
         open={Boolean(pending)}
         name={pending?.name ?? ''}
+        warningMessage={deleteWarningMessages.conference}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />

@@ -10,6 +10,8 @@ const STATUS_BORDER = 2;
 
 /** Matches `MuiAppBar` dark `backgroundColor` in `createKerenOrTheme` */
 const DARK_TOP_BAR = '#272727';
+const DARK_AVATAR_BG = '#FFB400';
+const DARK_STATUS_BG = '#81C784';
 
 interface UserAvatarProps {
   initials?: string;
@@ -40,6 +42,7 @@ export function UserAvatar({ initials = 'MF' }: UserAvatarProps) {
             border: `${AVATAR_BORDER}px solid #FFFFFF`,
             boxSizing: 'border-box',
             ...theme.applyStyles('dark', {
+              bgcolor: DARK_AVATAR_BG,
               borderColor: DARK_TOP_BAR,
             }),
           }),
@@ -63,6 +66,7 @@ export function UserAvatar({ initials = 'MF' }: UserAvatarProps) {
             border: `${STATUS_BORDER}px solid #FFFFFF`,
             boxSizing: 'border-box',
             ...theme.applyStyles('dark', {
+              bgcolor: DARK_STATUS_BG,
               borderColor: DARK_TOP_BAR,
             }),
           }),

@@ -61,8 +61,11 @@ export const datePickerComponents: NonNullable<ThemeOptions['components']> = {
   MuiPickersCalendarHeader: {
     styleOverrides: {
       root: {
-        position: 'relative',
-        justifyContent: 'center',
+        display: 'flex',
+        flexDirection: 'row /* @noflip */',
+        direction: 'ltr /* @noflip */',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginTop: 8,
         marginBottom: 0,
         paddingLeft: 8,
@@ -70,17 +73,20 @@ export const datePickerComponents: NonNullable<ThemeOptions['components']> = {
         minHeight: 44,
         maxHeight: 44,
         '& .MuiPickersArrowSwitcher-root': {
-          position: 'absolute',
-          left: 4,
-          top: '50%',
-          transform: 'translateY(-50%)',
+          position: 'static',
+          transform: 'none',
+          order: 1,
+          flexShrink: 0,
         },
       },
       labelContainer: {
+        order: 2,
         marginRight: 0,
         marginLeft: 0,
-        flex: 1,
-        justifyContent: 'center',
+        flex: '0 1 auto',
+        direction: 'rtl /* @noflip */',
+        justifyContent: 'flex-start /* @noflip */',
+        alignItems: 'center',
       },
       label: {
         fontSize: 14,
@@ -88,17 +94,24 @@ export const datePickerComponents: NonNullable<ThemeOptions['components']> = {
         letterSpacing: '1.25px',
         textTransform: 'uppercase',
         marginRight: 0,
-        marginLeft: 0,
+        marginLeft: 6,
+        textAlign: 'right /* @noflip */',
       },
       switchViewButton: {
         padding: 4,
+        marginRight: 0,
+        marginLeft: 0,
       },
     },
   },
   MuiPickersArrowSwitcher: {
     styleOverrides: {
       root: {
-        direction: 'rtl',
+        direction: 'ltr /* @noflip */',
+        flexDirection: 'row-reverse /* @noflip */',
+      },
+      spacer: {
+        width: 16,
       },
       button: ({ theme }: ThemeCallback) => ({
         color: theme.palette.text.secondary,
@@ -130,6 +143,10 @@ export const datePickerComponents: NonNullable<ThemeOptions['components']> = {
   },
   MuiDayCalendar: {
     styleOverrides: {
+      monthContainer: {
+        marginTop: 16,
+        marginBottom: 16,
+      },
       weekDayLabel: ({ theme }: ThemeCallback) => ({
         fontSize: 12,
         lineHeight: '20px',
